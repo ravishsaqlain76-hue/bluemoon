@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}{{ room.get_meta_title }}{% endblock %}
+{% block meta_description %}{{ room.get_meta_description }}{% endblock %}
+{% block meta_keywords %}{{ room.name|lower }}, {{ room.get_room_type_display|lower }} room islamabad, guest house room F-6 islamabad, blue moon residency{% endblock %}
+{% block og_title %}{{ room.get_meta_title }}{% endblock %}
+{% block og_description %}{{ room.get_meta_description }}{% endblock %}
+{% block nav_rooms %}active{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Home","item":"{{ SITE_URL }}/"},
+  {"@type":"ListItem","position":2,"name":"Rooms","item":"{{ SITE_URL }}/rooms/"},
+  {"@type":"ListItem","position":3,"name":"{{ room.name }}","item":"{{ SITE_URL }}/rooms/{{ room.slug }}/"}
+]}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HotelRoom",
+  "name": "{{ room.name|escapejs }}",
+  "description": "{{ room.description|escapejs }}",
+  "occupancy": {
+    "@type": "QuantitativeValue",
+    "maxValue": {{ room.capacity }}
+  },
+  {% if room.bed_type %}"bed": {"@type": "BedDetails", "typeOfBed": "{{ room.bed_type|escapejs }}"},{% endif %}
+  {% if room.room_size %}"floorSize": {"@type": "QuantitativeValue", "value": "{{ room.room_size|escapejs }}"},{% endif %}
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "PKR",
+    "price": "{{ room.price_per_night }}",
+    "availability": "{% if room.status == 'available' %}https://schema.org/InStock{% else %}https://schema.org/OutOfStock{% endif %}"
+  },
+  "containedInPlace": {
+    "@type": "Hotel",
+    "name": "{{ business.business_name|escapejs }}",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "{{ business.street_address|escapejs }}",
+      "addressLocality": "{{ business.locality|escapejs }}",
+      "addressRegion": "{{ business.region|escapejs }}",
+      "postalCode": "{{ business.postal_code }}",
+      "addressCountry": "{{ business.country }}"
+    }
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+  <div class="container-xl">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'rooms:room_list' %}">Rooms</a></li>
+      <li class="breadcrumb-item active">{{ room.name }}</li>
+    </ol></nav>
+    <h1 class="page-title">{{ room.name }}</h1>
+    <div class="page-pretitle">{{ room.get_room_type_display }} Room — Blue Moon Residency, F-6/2 Islamabad</div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row">
+      <!-- Room Details -->
+      <div class="col-lg-8">
+        <!-- Gallery -->
+        <div class="card mb-3">
+          {% if room.images.exists %}
+            <div class="card-body p-0">
+              {% if room.primary_image %}
+                <a href="{{ room.primary_image.image.url }}" data-fslightbox="gallery">
+                  <img src="{{ room.primary_image.image.url }}" alt="{{ room.name }} - Guest House Room in F-6/2 Islamabad" class="w-100" style="max-height: 400px; object-fit: cover; border-radius: 4px 4px 0 0;">
+                </a>
+              {% endif %}
+              {% if room.images.count > 1 %}
+                <div class="row g-2 p-3">
+                  {% for image in room.images.all %}
+                    {% if not image.is_primary or not room.primary_image %}
+                      <div class="col-3">
+                        <a href="{{ image.image.url }}" data-fslightbox="gallery">
+                          <img src="{{ image.image.url }}" alt="{{ image.caption }}" class="w-100 rounded" style="height: 80px; object-fit: cover; cursor: pointer;">
+                        </a>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          {% else %}
+            <div class="card-body d-flex align-items-center justify-content-center bg-light" style="height: 300px;">
+              <div class="text-center text-muted">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-lg mb-2" width="48" height="48" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none">
+                  <path d="M3 7v11m0 -4h18m0 4v-8a2 2 0 0 0 -2 -2h-8v6"/>
+                  <circle cx="7" cy="10" r="1"/>
+                </svg>
+                <p>No images available</p>
+              </div>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Description -->
+        <div class="card mb-3">
+          <div class="card-header">
+            <h3 class="card-title">About This Room</h3>
+          </div>
+          <div class="card-body">
+            <p>{{ room.description }}</p>
+            {% if room.bed_type or room.room_size %}
+            <div class="row mt-2">
+              {% if room.bed_type %}<div class="col-auto"><span class="badge bg-blue-lt">Bed: {{ room.bed_type }}</span></div>{% endif %}
+              {% if room.room_size %}<div class="col-auto"><span class="badge bg-green-lt">Size: {{ room.room_size }}</span></div>{% endif %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Amenities -->
+        {% if room.amenities_list %}
+          <div class="card mb-3">
+            <div class="card-header">
+              <h3 class="card-title">Amenities</h3>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                {% for amenity in room.amenities_list %}
+                  <div class="col-sm-6 col-md-4 mb-2">
+                    <span class="d-flex align-items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon text-success me-2" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <path d="M5 12l5 5l10 -10"/>
+                      </svg>
+                      {{ amenity }}
+                    </span>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- Booking Sidebar -->
+      <div class="col-lg-4">
+        <div class="card sticky-top" style="top: 1rem;">
+          <div class="card-body">
+            <div class="d-flex align-items-baseline mb-3">
+              <span class="h1 mb-0">PKR {{ room.price_per_night|floatformat:"0"|intcomma }}</span>
+              <span class="text-muted ms-1">/ night</span>
+            </div>
+            <div class="mb-3">
+              <span class="badge bg-blue-lt me-1">{{ room.get_room_type_display }}</span>
+              <span class="badge bg-green-lt">Up to {{ room.capacity }} guests</span>
+            </div>
+            <hr>
+            {% if seo_settings.booking_com_url %}
+              {# Temporary: redirect to Booking.com listing #}
+              <a href="{{ seo_settings.booking_com_url }}" class="btn btn-primary w-100 btn-lg" target="_blank" rel="noopener">Book on Booking.com</a>
+              <p class="text-muted text-center mt-2 mb-0">
+                <small>You'll be redirected to our Booking.com listing</small>
+              </p>
+            {% elif user.is_authenticated %}
+              <a href="{% url 'bookings:booking_create' room.pk %}" class="btn btn-primary w-100 btn-lg">Book Now</a>
+              <p class="text-muted text-center mt-2 mb-0">
+                <small>Pay at check-in — no upfront payment required</small>
+              </p>
+            {% else %}
+              <a href="{% url 'bookings:guest_booking_create' room.pk %}" class="btn btn-primary w-100 btn-lg">Book Now</a>
+              <p class="text-muted text-center mt-2 mb-0">
+                <small>Or <a href="{% url 'accounts:login' %}?next={% url 'bookings:booking_create' room.pk %}">login</a> if you have an account</small>
+              </p>
+            {% endif %}
+          </div>
+        </div>
+
+        <!-- Related Rooms -->
+        {% if related_rooms %}
+          <div class="card mt-3">
+            <div class="card-header">
+              <h3 class="card-title">Similar Rooms</h3>
+            </div>
+            <div class="list-group list-group-flush">
+              {% for related in related_rooms %}
+                <a href="{% url 'rooms:room_detail' related.slug %}" class="list-group-item list-group-item-action">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <strong>{{ related.name }}</strong>
+                      <br><small class="text-muted">Up to {{ related.capacity }} guests</small>
+                    </div>
+                    <span class="text-nowrap">PKR {{ related.price_per_night|floatformat:"0"|intcomma }}/night</span>
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

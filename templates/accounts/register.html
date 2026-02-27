@@ -1,0 +1,71 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Register | Blue Moon{% endblock %}
+
+{% block content %}
+<div class="card card-md">
+  <div class="card-body">
+    <h2 class="h2 text-center mb-4">Create new account</h2>
+    <form method="post" autocomplete="off">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control {% if form.username.errors %}is-invalid{% endif %}" placeholder="Choose a username" required value="{{ form.username.value|default:'' }}">
+        {% if form.username.errors %}
+          <div class="invalid-feedback">{{ form.username.errors.0 }}</div>
+        {% endif %}
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="form-label">First Name</label>
+          <input type="text" name="first_name" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" placeholder="First name" required value="{{ form.first_name.value|default:'' }}">
+          {% if form.first_name.errors %}
+            <div class="invalid-feedback">{{ form.first_name.errors.0 }}</div>
+          {% endif %}
+        </div>
+        <div class="col">
+          <label class="form-label">Last Name</label>
+          <input type="text" name="last_name" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" placeholder="Last name" required value="{{ form.last_name.value|default:'' }}">
+          {% if form.last_name.errors %}
+            <div class="invalid-feedback">{{ form.last_name.errors.0 }}</div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" placeholder="your@email.com" required value="{{ form.email.value|default:'' }}">
+        {% if form.email.errors %}
+          <div class="invalid-feedback">{{ form.email.errors.0 }}</div>
+        {% endif %}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password1" class="form-control {% if form.password1.errors %}is-invalid{% endif %}" placeholder="Password" required>
+        {% if form.password1.errors %}
+          <div class="invalid-feedback">{{ form.password1.errors.0 }}</div>
+        {% endif %}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Confirm Password</label>
+        <input type="password" name="password2" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" placeholder="Confirm password" required>
+        {% if form.password2.errors %}
+          <div class="invalid-feedback">{{ form.password2.errors.0 }}</div>
+        {% endif %}
+      </div>
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="form-footer">
+        <button type="submit" class="btn btn-primary w-100">Create account</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="text-center text-muted mt-3">
+  Already have an account? <a href="{% url 'accounts:login' %}" tabindex="-1">Login</a>
+</div>
+{% endblock %}

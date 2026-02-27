@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Dashboard | Blue Moon{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+  <div class="container-xl">
+    <div class="page-pretitle">Account</div>
+    <h2 class="page-title">My Dashboard</h2>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    <!-- Stats -->
+    <div class="row row-deck row-cards mb-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="subheader">Total Bookings</div>
+            <div class="h1 mb-0">{{ bookings.count }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="subheader">Active Bookings</div>
+            <div class="h1 mb-0">
+              {% with active=0 %}
+                {% for b in bookings %}
+                  {% if b.status == 'confirmed' %}
+                  {% endif %}
+                {% endfor %}
+              {% endwith %}
+              {{ bookings|length }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="subheader">Member Since</div>
+            <div class="h3 mb-0">{{ user.date_joined|date:"M Y" }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="subheader">Quick Actions</div>
+            <a href="{% url 'rooms:room_list' %}" class="btn btn-primary btn-sm mt-1">Browse Rooms</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Bookings -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Recent Bookings</h3>
+      </div>
+      {% if bookings %}
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Room</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for booking in bookings %}
+                <tr>
+                  <td><strong>{{ booking.booking_reference }}</strong></td>
+                  <td>{{ booking.room.name }}</td>
+                  <td>{{ booking.check_in|date:"M d, Y" }}</td>
+                  <td>{{ booking.check_out|date:"M d, Y" }}</td>
+                  <td>${{ booking.total_price|intcomma }}</td>
+                  <td>
+                    <span class="badge
+                      {% if booking.status == 'confirmed' %}bg-success
+                      {% elif booking.status == 'pending' %}bg-warning
+                      {% elif booking.status == 'cancelled' %}bg-danger
+                      {% elif booking.status == 'completed' %}bg-info
+                      {% endif %}">
+                      {{ booking.get_status_display }}
+                    </span>
+                  </td>
+                  <td>
+                    {% if booking.status == 'confirmed' or booking.status == 'pending' %}
+                      <a href="{% url 'bookings:booking_cancel' booking.pk %}" class="btn btn-outline-danger btn-sm"
+                         onclick="return confirm('Are you sure you want to cancel this booking?')">Cancel</a>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="card-body">
+          <div class="empty">
+            <p class="empty-title">No bookings yet</p>
+            <p class="empty-subtitle text-muted">Start by browsing our available rooms.</p>
+            <div class="empty-action">
+              <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">Browse Rooms</a>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

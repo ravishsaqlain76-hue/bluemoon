@@ -1,0 +1,881 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    {% if page_seo.meta_title %}<title>{{ page_seo.meta_title }}</title>{% else %}<title>Blue Moon Residency | Best Guest House in F6 Islamabad Near Centaurus Mall</title>{% endif %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% if page_seo.meta_description %}<meta name="description" content="{{ page_seo.meta_description }}">{% else %}<meta name="description" content="Blue Moon Residency — Best budget guest house in F-6/2 Islamabad near Centaurus Mall. Rooms from PKR 5,500/night with free Wi-Fi, AC, parking. 5 min from Faisal Mosque. Pay at check-in!">{% endif %}
+    {% if page_seo.keywords %}<meta name="keywords" content="{{ page_seo.keywords }}">{% else %}<meta name="keywords" content="guest house in F6 islamabad, budget guest house near centaurus mall, blue moon residency islamabad, guest house near me, guest house F-6/2 islamabad, hotel near faisal mosque, cheap accommodation islamabad, guest house islamabad F6, best guest house islamabad">{% endif %}
+    <meta name="author" content="Blue Moon Residency">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="{{ SITE_URL }}/">
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Blue Moon Residency | Best Guest House in F6 Islamabad Near Centaurus Mall">
+    <meta property="og:description" content="Budget guest house in F-6/2 Islamabad near Centaurus Mall. Rooms from PKR 5,500/night. Free Wi-Fi, AC, parking. Pay at check-in!">
+    <meta property="og:url" content="{{ SITE_URL }}/">
+    <meta property="og:site_name" content="Blue Moon Residency">
+    <meta property="og:locale" content="en_US">
+    {% if seo_settings.og_image %}
+    <meta property="og:image" content="{{ SITE_URL }}{{ seo_settings.og_image.url }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    {% else %}
+    <meta property="og:image" content="{{ SITE_URL }}{% static 'pak.png' %}">
+    {% endif %}
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blue Moon Residency | Guest House in F6 Islamabad">
+    <meta name="twitter:description" content="Budget guest house near Centaurus Mall, F-6/2 Islamabad. Rooms from PKR 5,500/night. Pay at check-in!">
+    {% if seo_settings.og_image %}
+    <meta name="twitter:image" content="{{ SITE_URL }}{{ seo_settings.og_image.url }}">
+    {% else %}
+    <meta name="twitter:image" content="{{ SITE_URL }}{% static 'pak.png' %}">
+    {% endif %}
+
+    <!-- Geo Tags for Local SEO -->
+    <meta name="geo.region" content="PK-IS">
+    <meta name="geo.placename" content="Islamabad">
+    <meta name="geo.position" content="{{ seo_settings.latitude }};{{ seo_settings.longitude }}">
+    <meta name="ICBM" content="{{ seo_settings.latitude }}, {{ seo_settings.longitude }}">
+
+    <!-- JSON-LD: Hotel / LodgingBusiness / LocalBusiness Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": ["Hotel", "LodgingBusiness"],
+      "@id": "{{ SITE_URL }}/#hotel",
+      "name": "Blue Moon Residency",
+      "alternateName": "Blue Moon Guest House Islamabad",
+      "description": "Best budget guest house in F-6/2 Islamabad near Centaurus Mall. Comfortable rooms with free Wi-Fi, AC, parking, and daily housekeeping. Pay at check-in.",
+      "url": "{{ SITE_URL }}",
+      "telephone": "{{ seo_settings.phone }}",
+      "email": "{{ seo_settings.email }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ seo_settings.street_address }}",
+        "addressLocality": "Islamabad",
+        "addressRegion": "{{ seo_settings.region }}",
+        "postalCode": "{{ seo_settings.postal_code }}",
+        "addressCountry": "PK",
+        "areaServed": {
+          "@type": "City",
+          "name": "Islamabad"
+        }
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": {{ seo_settings.latitude }},
+        "longitude": {{ seo_settings.longitude }}
+      },
+      "hasMap": "https://www.google.com/maps?q={{ seo_settings.latitude }},{{ seo_settings.longitude }}",
+      "priceRange": "{{ seo_settings.price_range }}",
+      "checkinTime": "{{ seo_settings.check_in_time }}",
+      "checkoutTime": "{{ seo_settings.check_out_time }}",
+      "currenciesAccepted": "PKR",
+      "paymentAccepted": "Cash",
+      "numberOfRooms": "{{ rooms|length }}",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "{{ seo_settings.phone }}",
+        "email": "{{ seo_settings.email }}",
+        "contactType": "reservations",
+        "availableLanguage": ["English", "Urdu"],
+        "areaServed": "PK"
+      },
+      "openingHoursSpecification": {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+        "opens": "00:00",
+        "closes": "23:59"
+      },
+      "amenityFeature": [
+        {"@type": "LocationFeatureSpecification", "name": "Free Wi-Fi", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Air Conditioning", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Room Service", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Daily Housekeeping", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "24/7 Security", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "Airport Transfer", "value": true},
+        {"@type": "LocationFeatureSpecification", "name": "LED TV", "value": true}
+      ],
+      {% if review_count > 0 %}
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "{{ review_avg }}",
+        "reviewCount": "{{ review_count }}",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      {% endif %}
+      "image": "{% if seo_settings.og_image %}{{ SITE_URL }}{{ seo_settings.og_image.url }}{% else %}{{ SITE_URL }}{% static 'pak.png' %}{% endif %}",
+      "logo": "{{ SITE_URL }}{% static 'pak.png' %}"
+    }
+    </script>
+
+    <!-- JSON-LD: WebSite with SearchAction -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Blue Moon Residency",
+      "url": "{{ SITE_URL }}",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ SITE_URL }}/rooms/?type={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    {% if faqs %}
+    <!-- JSON-LD: FAQ Schema for Rich Results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {% for faq in faqs %}
+        {
+          "@type": "Question",
+          "name": "{{ faq.question|escapejs }}",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "{{ faq.answer|escapejs }}"
+          }
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+      ]
+    }
+    </script>
+    {% endif %}
+
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'pak.png' %}">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.theme.default.min.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Landing Page Stylesheet -->
+    <link href="{% static 'css/landing.css' %}" rel="stylesheet">
+</head>
+
+<body class="landing-page">
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border" style="width: 3rem; height: 3rem; color: #c5a04e;" role="status">
+            <span class="sr-only visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Topbar Start -->
+    <div class="container-fluid bg-dark px-5 d-none d-lg-block">
+        <div class="row gx-0">
+            <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>{{ seo_settings.street_address }}, F-6/2, {{ seo_settings.locality }}</small>
+                    {% if seo_settings.phone %}
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i><a href="tel:{{ seo_settings.phone }}" class="text-light text-decoration-none">{{ seo_settings.phone }}</a></small>
+                    {% endif %}
+                    {% if seo_settings.email %}
+                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i><a href="mailto:{{ seo_settings.email }}" class="text-light text-decoration-none">{{ seo_settings.email }}</a></small>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-4 text-center text-lg-end">
+                <div class="d-inline-flex align-items-center" style="height: 45px;">
+                    {% if seo_settings.phone %}
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="https://wa.me/{{ seo_settings.phone|cut:'+' |cut:' ' |cut:'-' }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp fw-normal"></i></a>
+                    {% endif %}
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#" aria-label="Facebook"><i class="fab fa-facebook-f fw-normal"></i></a>
+                    <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="#" aria-label="Instagram"><i class="fab fa-instagram fw-normal"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar & Hero Start -->
+    <div class="container-fluid position-relative p-0">
+        <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
+            <a href="{% url 'home' %}" class="navbar-brand p-0">
+                <h1 class="m-0" style="color: #c5a04e;"><i class="fa fa-moon me-3"></i>Blue Moon</h1>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto py-0">
+                    <a href="{% url 'home' %}" class="nav-item nav-link">Home</a>
+                    <a href="{% url 'rooms:room_list' %}" class="nav-item nav-link">Rooms</a>
+                    <a href="{% url 'about' %}" class="nav-item nav-link">About</a>
+                    <a href="{% url 'location_landing' %}" class="nav-item nav-link">Location</a>
+                    <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
+                </div>
+                {% if user.is_authenticated %}
+                <a href="{% url 'accounts:dashboard' %}" class="btn btn-primary rounded-pill py-2 px-4">Dashboard</a>
+                {% else %}
+                <a href="{% url 'accounts:register' %}" class="btn btn-primary rounded-pill py-2 px-4">Register</a>
+                {% endif %}
+            </div>
+        </nav>
+
+        <div class="container-fluid bg-primary py-5 mb-5 hero-header" style="min-height: 600px;">
+            <div class="container py-5">
+                <div class="row justify-content-center py-5">
+                    <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
+                        <h1 class="display-3 text-white mb-3 animated slideInDown">Blue Moon Residency</h1>
+                        <p class="fs-4 text-white mb-4 animated slideInDown">Best <strong>Guest House in F6 Islamabad</strong> — Budget Rooms Near Centaurus Mall, Free Wi-Fi &amp; Parking</p>
+                        <div class="position-relative d-inline-flex align-items-center animated slideInDown">
+                            <a href="{% url 'rooms:room_list' %}" class="btn btn-primary py-3 px-5 me-3 rounded-pill" style="font-size: 1.1rem;">Browse Rooms</a>
+                            <a href="{% url 'contact' %}" class="btn btn-outline-light py-3 px-5 rounded-pill" style="font-size: 1.1rem;">Contact Us</a>
+                        </div>
+                        {% if review_count > 0 %}
+                        <div class="mt-4 animated slideInDown">
+                            <span class="text-warning fs-4">
+                                {% for i in "12345" %}{% if forloop.counter <= review_avg|floatformat:"0"|add:"0" %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}
+                            </span>
+                            <span class="text-white-50 fs-5 ms-2">{{ review_avg }}/5 from {{ review_count }} guest reviews</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Navbar & Hero End -->
+
+
+    <!-- About Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="img-fluid position-absolute w-100 h-100" src="{% static 'img/landing/about.jpg' %}" alt="Blue Moon Residency - Budget Guest House in F6 Islamabad near Centaurus Mall" loading="lazy" style="object-fit: cover; border-radius: 8px;">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <h6 class="section-title bg-white text-start text-primary pe-3">About Us</h6>
+                    <h1 class="mb-4">Welcome to <span class="text-primary">Blue Moon Residency</span></h1>
+                    <p class="mb-4"><strong>Blue Moon Residency</strong> is the best <strong>budget guest house in F6 Islamabad</strong>, located at <strong>House # 2-A, Justice Abdul Rasheed Road, F-6/2, Islamabad</strong>. Whether you're visiting for business, tourism, or medical purposes, we provide comfortable accommodation in one of Islamabad's most prestigious neighborhoods.</p>
+                    <p class="mb-4">Our <strong>guest house near Centaurus Mall</strong> is just 8 minutes drive from Centaurus, 5 minutes from Faisal Mosque, and 3 minutes walk from F-6 Super Market. Rooms start from <strong>PKR 5,500/night</strong> with no advance payment required.</p>
+                    <div class="row gy-2 gx-4 mb-4">
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Free Wi-Fi in Every Room</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Air Conditioning</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Free Secure Parking</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Daily Housekeeping</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>24/7 Front Desk</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0"><i class="fa fa-arrow-right text-primary me-2"></i>Pay at Check-in</p>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary py-3 px-5 mt-2" href="{% url 'about' %}">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+    <!-- Amenities / Services Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Guest House Amenities</h6>
+                <h2 class="mb-5">What Our Islamabad Guest House Offers</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="service-item rounded pt-3">
+                        <div class="p-4">
+                            <i class="fa fa-3x fa-wifi text-primary mb-4"></i>
+                            <h5>Free Wi-Fi</h5>
+                            <p>High-speed internet in every room and common area for seamless connectivity.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item rounded pt-3">
+                        <div class="p-4">
+                            <i class="fa fa-3x fa-snowflake text-primary mb-4"></i>
+                            <h5>Air Conditioning</h5>
+                            <p>Climate-controlled rooms with individual AC units for your comfort year-round.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="service-item rounded pt-3">
+                        <div class="p-4">
+                            <i class="fa fa-3x fa-car text-primary mb-4"></i>
+                            <h5>Free Parking</h5>
+                            <p>Secure on-premises parking at no extra charge for all our guests.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                    <div class="service-item rounded pt-3">
+                        <div class="p-4">
+                            <i class="fa fa-3x fa-broom text-primary mb-4"></i>
+                            <h5>Housekeeping</h5>
+                            <p>Daily room cleaning and fresh linen to ensure a spotless stay.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="service-item rounded pt-3">
+                        <div class="p-4">
+                            <i class="fa fa-3x fa-concierge-bell text-primary mb-4"></i>
+                            <h5>Room Service</h5>
+                            <p>In-room dining and refreshments available on request throughout your stay.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item rounded pt-3">
+                        <div class="p-4">
+                            <i class="fa fa-3x fa-shield-alt text-primary mb-4"></i>
+                            <h5>24/7 Security</h5>
+                            <p>Round-the-clock security and CCTV surveillance for your peace of mind.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="service-item rounded pt-3">
+                        <div class="p-4">
+                            <i class="fa fa-3x fa-shuttle-van text-primary mb-4"></i>
+                            <h5>Airport Pickup</h5>
+                            <p>Airport transfer service available on request for a hassle-free arrival.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                    <div class="service-item rounded pt-3">
+                        <div class="p-4">
+                            <i class="fa fa-3x fa-tv text-primary mb-4"></i>
+                            <h5>LED TV</h5>
+                            <p>Flat screen TV with cable channels in every room for entertainment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Amenities End -->
+
+
+    <!-- Rooms Gallery Start -->
+    <div class="container-xxl py-5 destination">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Gallery</h6>
+                <h2 class="mb-5">Blue Moon Residency — Guest House in F-6/2 Islamabad</h2>
+            </div>
+            <div class="row g-3">
+                <div class="col-lg-7 col-md-6">
+                    <div class="row g-3">
+                        <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
+                            <a class="position-relative d-block overflow-hidden" href="{% url 'rooms:room_list' %}">
+                                <img class="img-fluid" src="{% static 'img/landing/destination-1.jpg' %}" alt="Blue Moon Residency Guest House Rooms" loading="lazy" style="border-radius: 8px;">
+                                <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2" style="border-radius: 4px;">Deluxe Rooms</div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
+                            <a class="position-relative d-block overflow-hidden" href="{% url 'rooms:room_list' %}">
+                                <img class="img-fluid" src="{% static 'img/landing/destination-2.jpg' %}" alt="Standard Rooms at Blue Moon Residency" loading="lazy" style="border-radius: 8px;">
+                                <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2" style="border-radius: 4px;">Standard Rooms</div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
+                            <a class="position-relative d-block overflow-hidden" href="{% url 'rooms:room_list' %}">
+                                <img class="img-fluid" src="{% static 'img/landing/destination-3.jpg' %}" alt="Suite Rooms at Blue Moon Residency" loading="lazy" style="border-radius: 8px;">
+                                <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2" style="border-radius: 4px;">Suite Rooms</div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;">
+                    <a class="position-relative d-block h-100 overflow-hidden" href="{% url 'rooms:room_list' %}">
+                        <img class="img-fluid position-absolute w-100 h-100" src="{% static 'img/landing/destination-4.jpg' %}" alt="Family Rooms at Blue Moon Residency F-6/2 Islamabad" loading="lazy" style="object-fit: cover; border-radius: 8px;">
+                        <div class="bg-white text-primary fw-bold position-absolute bottom-0 end-0 m-3 py-1 px-2" style="border-radius: 4px;">Family Rooms</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Rooms Gallery End -->
+
+
+    <!-- Room Packages Start -->
+    {% if rooms %}
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Rooms &amp; Rates</h6>
+                <h2 class="mb-5">Affordable Room Packages in F-6 Islamabad</h2>
+            </div>
+            <div class="row g-4 justify-content-center">
+                {% for room in rooms %}
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="package-item">
+                        <div class="overflow-hidden">
+                            {% if room.primary_image %}
+                            <img class="img-fluid" src="{{ room.primary_image.image.url }}" alt="{{ room.name }} - Guest House Room in F-6/2 Islamabad" loading="lazy" style="height: 250px; width: 100%; object-fit: cover;">
+                            {% else %}
+                            <div class="d-flex align-items-center justify-content-center bg-light" style="height: 250px;">
+                                <i class="fa fa-bed fa-3x text-muted"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex border-bottom">
+                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-bed text-primary me-2"></i>{{ room.get_room_type_display }}</small>
+                            <small class="flex-fill text-center border-end py-2"><i class="fa fa-user text-primary me-2"></i>{{ room.capacity }} Guests</small>
+                            <small class="flex-fill text-center py-2"><i class="fa fa-wifi text-primary me-2"></i>Free Wi-Fi</small>
+                        </div>
+                        <div class="text-center p-4">
+                            <h3 class="mb-0">PKR {{ room.price_per_night|floatformat:"0"|intcomma }}</h3>
+                            <p class="text-muted mb-3">per night</p>
+                            <p>{{ room.description|truncatewords:20 }}</p>
+                            <div class="d-flex justify-content-center mb-2">
+                                <a href="{% url 'rooms:room_detail' room.slug %}" class="btn btn-sm btn-primary px-3 border-end" style="border-radius: 30px 0 0 30px;">View Details</a>
+                                {% if seo_settings.booking_com_url %}
+                                <a href="{{ seo_settings.booking_com_url }}" class="btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;" target="_blank" rel="noopener">Book Now</a>
+                                {% elif user.is_authenticated %}
+                                <a href="{% url 'bookings:booking_create' room.pk %}" class="btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Book Now</a>
+                                {% else %}
+                                <a href="{% url 'bookings:guest_booking_create' room.pk %}" class="btn btn-sm btn-primary px-3" style="border-radius: 0 30px 30px 0;">Book Now</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="text-center mt-4 wow fadeInUp">
+                <a href="{% url 'rooms:room_list' %}" class="btn btn-primary py-3 px-5 rounded-pill">View All Rooms</a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- Room Packages End -->
+
+
+    <!-- Booking CTA Start -->
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="booking p-5" style="border-radius: 12px;">
+                <div class="row g-5 align-items-center">
+                    <div class="col-md-6 text-white">
+                        <h6 class="text-white text-uppercase">Booking</h6>
+                        <h1 class="text-white mb-4">Book Your Stay Today</h1>
+                        <p class="mb-4"><strong>Blue Moon Residency</strong> offers the most comfortable guest house experience in F-6/2 Islamabad. No advance payment required — simply pay at check-in.</p>
+                        <p class="mb-4">Rooms starting from <strong>PKR 5,500/night</strong> with complimentary Wi-Fi, AC, parking, and daily housekeeping included. Perfect for business travelers, tourists, and families.</p>
+                        <a class="btn btn-outline-light py-3 px-5 mt-2 rounded-pill" href="{% url 'rooms:room_list' %}">Browse Rooms</a>
+                    </div>
+                    <div class="col-md-6">
+                        <h1 class="text-white mb-4">Quick Enquiry</h1>
+                        <form method="post" action="{% url 'contact' %}">
+                            {% csrf_token %}
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control bg-transparent" id="name" name="name" placeholder="Your Name" required>
+                                        <label for="name">Your Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control bg-transparent" id="email" name="email" placeholder="Your Email" required>
+                                        <label for="email">Your Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control bg-transparent" id="check_in" name="check_in" placeholder="Check-in">
+                                        <label for="check_in">Check-in Date</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="date" class="form-control bg-transparent" id="check_out" name="check_out" placeholder="Check-out">
+                                        <label for="check_out">Check-out Date</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating">
+                                        <textarea class="form-control bg-transparent" placeholder="Your Message" id="message" name="message" style="height: 100px"></textarea>
+                                        <label for="message">Special Request</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-outline-light w-100 py-3" type="submit">Send Enquiry</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Booking CTA End -->
+
+
+    <!-- How to Book - Process Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center pb-4 wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">How to Book</h6>
+                <h2 class="mb-5">3 Easy Steps to Book a Room in Islamabad</h2>
+            </div>
+            <div class="row gy-5 gx-4 justify-content-center">
+                <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="position-relative border pt-5 pb-4 px-4" style="border-color: #c5a04e !important;">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle position-absolute top-0 start-50 translate-middle shadow" style="width: 100px; height: 100px; background: #c5a04e;">
+                            <i class="fa fa-search fa-3x text-white"></i>
+                        </div>
+                        <h5 class="mt-4">Choose a Room</h5>
+                        <hr class="w-25 mx-auto mb-1" style="background: #c5a04e; height: 2px;">
+                        <hr class="w-50 mx-auto mt-0" style="background: #c5a04e; height: 2px;">
+                        <p class="mb-0">Browse our Standard, Deluxe, Suite, and Family rooms. Filter by price, capacity, and room type.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="position-relative border pt-5 pb-4 px-4" style="border-color: #c5a04e !important;">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle position-absolute top-0 start-50 translate-middle shadow" style="width: 100px; height: 100px; background: #c5a04e;">
+                            <i class="fa fa-calendar-check fa-3x text-white"></i>
+                        </div>
+                        <h5 class="mt-4">Book Online</h5>
+                        <hr class="w-25 mx-auto mb-1" style="background: #c5a04e; height: 2px;">
+                        <hr class="w-50 mx-auto mt-0" style="background: #c5a04e; height: 2px;">
+                        <p class="mb-0">Select your dates, fill in your details, and confirm your booking. No advance payment needed!</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 text-center pt-4 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="position-relative border pt-5 pb-4 px-4" style="border-color: #c5a04e !important;">
+                        <div class="d-inline-flex align-items-center justify-content-center rounded-circle position-absolute top-0 start-50 translate-middle shadow" style="width: 100px; height: 100px; background: #c5a04e;">
+                            <i class="fa fa-bed fa-3x text-white"></i>
+                        </div>
+                        <h5 class="mt-4">Enjoy Your Stay</h5>
+                        <hr class="w-25 mx-auto mb-1" style="background: #c5a04e; height: 2px;">
+                        <hr class="w-50 mx-auto mt-0" style="background: #c5a04e; height: 2px;">
+                        <p class="mb-0">Arrive at Blue Moon Residency, check in, and pay at the front desk. Enjoy your comfortable stay!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Process End -->
+
+
+    <!-- Testimonials Start -->
+    {% if testimonials %}
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="text-center">
+                <h6 class="section-title bg-white text-center text-primary px-3">Guest Reviews</h6>
+                <h2 class="mb-5">What Guests Say About Blue Moon Residency</h2>
+            </div>
+            <div class="owl-carousel testimonial-carousel position-relative">
+                {% for t in testimonials %}
+                <div class="testimonial-item bg-white text-center border p-4">
+                    <div class="d-inline-flex align-items-center justify-content-center rounded-circle mb-3 shadow" style="width: 80px; height: 80px; background: rgba(197,160,78,0.15);">
+                        <span style="font-size: 2rem; color: #c5a04e; font-weight: 700;">{{ t.name|make_list|first|upper }}</span>
+                    </div>
+                    <h5 class="mb-0">{{ t.name }}</h5>
+                    <p>{% if t.location %}{{ t.location }}{% else %}Guest{% endif %}</p>
+                    <div class="mb-2">
+                        {% for i in "12345" %}{% if forloop.counter <= t.rating %}<small class="fa fa-star" style="color: #f59f00;"></small>{% else %}<small class="fa fa-star text-muted"></small>{% endif %}{% endfor %}
+                    </div>
+                    <p class="mb-0">{{ t.text|truncatewords:30 }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- Testimonials End -->
+
+
+    <!-- FAQ Section Start -->
+    {% if faqs %}
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h6 class="section-title bg-white text-center text-primary px-3">FAQ</h6>
+                <h2 class="mb-5">Guest House in Islamabad — Frequently Asked Questions</h2>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="accordion" id="faq-accordion">
+                        {% for faq in faqs %}
+                        <div class="accordion-item">
+                            <h3 class="accordion-header">
+                                <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq-{{ faq.pk }}">
+                                    {{ faq.question }}
+                                </button>
+                            </h3>
+                            <div id="faq-{{ faq.pk }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#faq-accordion">
+                                <div class="accordion-body text-muted">{{ faq.answer }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- FAQ Section End -->
+
+
+    <!-- Google Map Section -->
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h6 class="section-title bg-white text-center text-primary px-3">Location</h6>
+                <h2 class="mb-3">Find Blue Moon Residency in F-6/2 Islamabad</h2>
+                <p class="text-muted">{{ seo_settings.street_address }}, F-6/2, {{ seo_settings.locality }}, Pakistan</p>
+            </div>
+            <div class="rounded overflow-hidden" style="height: 400px;">
+                <iframe src="{{ business.google_maps_embed_url }}" width="100%" height="400" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Blue Moon Residency Location - F-6/2 Islamabad"></iframe>
+            </div>
+        </div>
+    </div>
+    <!-- Map End -->
+
+
+    <!-- Internal Links Section Start -->
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="text-center mb-4">
+                <h6 class="section-title bg-white text-center text-primary px-3">Explore</h6>
+                <h2 class="mb-3">Guest House Accommodation in Islamabad</h2>
+                <p class="text-muted">Discover more about Blue Moon Residency and our services</p>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-3 col-md-6">
+                    <div class="border rounded p-4 text-center h-100">
+                        <i class="fa fa-map-marker-alt fa-2x mb-3" style="color: #c5a04e;"></i>
+                        <h5><a href="{% url 'location_landing' %}" class="text-dark text-decoration-none">Guest House in F-6/2 Islamabad</a></h5>
+                        <p class="text-muted mb-0">Our prime location in F-6/2 sector near Faisal Mosque and Margalla Hills.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="border rounded p-4 text-center h-100">
+                        <i class="fa fa-city fa-2x mb-3" style="color: #c5a04e;"></i>
+                        <h5><a href="{% url 'location_islamabad' %}" class="text-dark text-decoration-none">Guest House in Islamabad</a></h5>
+                        <p class="text-muted mb-0">Affordable accommodation for tourists, business travelers, and families visiting Islamabad.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="border rounded p-4 text-center h-100">
+                        <i class="fa fa-mosque fa-2x mb-3" style="color: #c5a04e;"></i>
+                        <h5><a href="{% url 'location_near_faisal_mosque' %}" class="text-dark text-decoration-none">Near Faisal Mosque</a></h5>
+                        <p class="text-muted mb-0">Just 5 minutes from Faisal Mosque — ideal for tourists visiting Islamabad's top landmark.</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="border rounded p-4 text-center h-100">
+                        <i class="fa fa-bed fa-2x mb-3" style="color: #c5a04e;"></i>
+                        <h5><a href="{% url 'rooms:room_list' %}" class="text-dark text-decoration-none">Browse All Rooms</a></h5>
+                        <p class="text-muted mb-0">Standard, Deluxe, Suite &amp; Family rooms from PKR 5,500/night with all amenities included.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Internal Links Section End -->
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3" style="color: #c5a04e !important;">Blue Moon Residency</h4>
+                    <a class="btn btn-link" href="{% url 'about' %}">About Us</a>
+                    <a class="btn btn-link" href="{% url 'contact' %}">Contact Us</a>
+                    <a class="btn btn-link" href="{% url 'rooms:room_list' %}">Our Rooms</a>
+                    <a class="btn btn-link" href="{% url 'location_landing' %}">Guest House in F-6/2</a>
+                    <a class="btn btn-link" href="{% url 'location_islamabad' %}">Guest House in Islamabad</a>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3" style="color: #c5a04e !important;">Contact</h4>
+                    <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>{{ seo_settings.street_address }}, F-6/2, {{ seo_settings.locality }}</p>
+                    {% if seo_settings.phone %}
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i><a href="tel:{{ seo_settings.phone }}" class="text-light text-decoration-none">{{ seo_settings.phone }}</a></p>
+                    {% endif %}
+                    {% if seo_settings.email %}
+                    <p class="mb-2"><i class="fa fa-envelope me-3"></i><a href="mailto:{{ seo_settings.email }}" class="text-light text-decoration-none">{{ seo_settings.email }}</a></p>
+                    {% endif %}
+                    <div class="d-flex pt-2">
+                        {% if seo_settings.phone %}
+                        <a class="btn btn-outline-light btn-social" href="https://wa.me/{{ seo_settings.phone|cut:'+' |cut:' ' |cut:'-' }}" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
+                        {% endif %}
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3" style="color: #c5a04e !important;">Near Us</h4>
+                    <p class="mb-2"><i class="fa fa-arrow-right me-2" style="color: #c5a04e;"></i>Faisal Mosque — 5 min</p>
+                    <p class="mb-2"><i class="fa fa-arrow-right me-2" style="color: #c5a04e;"></i>Margalla Hills — 10 min</p>
+                    <p class="mb-2"><i class="fa fa-arrow-right me-2" style="color: #c5a04e;"></i>F-6 Super Market — 3 min walk</p>
+                    <p class="mb-2"><i class="fa fa-arrow-right me-2" style="color: #c5a04e;"></i>Centaurus Mall — 8 min</p>
+                    <p class="mb-2"><i class="fa fa-arrow-right me-2" style="color: #c5a04e;"></i>PIMS Hospital — 7 min</p>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <h4 class="text-white mb-3" style="color: #c5a04e !important;">Quick Booking</h4>
+                    <p>Book your stay at the best guest house in F-6/2 Islamabad. No advance payment needed.</p>
+                    <a href="{% url 'rooms:room_list' %}" class="btn btn-primary py-2 px-4 rounded-pill">Book Now</a>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; 2026 <a class="border-bottom" href="{% url 'home' %}" style="color: #c5a04e;">Blue Moon Residency</a> — Guest House in F-6/2, Islamabad. All rights reserved.
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="{% url 'home' %}">Home</a>
+                            <a href="{% url 'rooms:room_list' %}">Rooms</a>
+                            <a href="{% url 'about' %}">About</a>
+                            <a href="{% url 'contact' %}">Contact</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- WhatsApp Float -->
+    {% if seo_settings.phone %}
+    <a href="https://wa.me/{{ seo_settings.phone|cut:'+' |cut:' ' |cut:'-' }}" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    {% endif %}
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-lg-square back-to-top" style="background: #c5a04e; color: #fff;"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Landing Page JS -->
+    <script>
+    (function ($) {
+        "use strict";
+
+        // Spinner
+        setTimeout(function () {
+            if ($('#spinner').length > 0) {
+                $('#spinner').removeClass('show');
+            }
+        }, 1);
+
+        // Init WOW.js
+        new WOW().init();
+
+        // Sticky Navbar
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 45) {
+                $('.navbar').addClass('sticky-top shadow-sm');
+            } else {
+                $('.navbar').removeClass('sticky-top shadow-sm');
+            }
+        });
+
+        // Dropdown hover on desktop
+        var $dropdown = $(".dropdown");
+        var $dropdownToggle = $(".dropdown-toggle");
+        var $dropdownMenu = $(".dropdown-menu");
+        var showClass = "show";
+
+        $(window).on("load resize", function() {
+            if (this.matchMedia("(min-width: 992px)").matches) {
+                $dropdown.hover(
+                    function() { $(this).addClass(showClass); $(this).find($dropdownToggle).attr("aria-expanded", "true"); $(this).find($dropdownMenu).addClass(showClass); },
+                    function() { $(this).removeClass(showClass); $(this).find($dropdownToggle).attr("aria-expanded", "false"); $(this).find($dropdownMenu).removeClass(showClass); }
+                );
+            } else {
+                $dropdown.off("mouseenter mouseleave");
+            }
+        });
+
+        // Back to top
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 300) {
+                $('.back-to-top').fadeIn('slow');
+            } else {
+                $('.back-to-top').fadeOut('slow');
+            }
+        });
+        $('.back-to-top').click(function () {
+            $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+            return false;
+        });
+
+        // Testimonials carousel
+        $(".testimonial-carousel").owlCarousel({
+            autoplay: true,
+            smartSpeed: 1000,
+            center: true,
+            margin: 24,
+            dots: true,
+            loop: true,
+            nav: false,
+            responsive: {
+                0: { items: 1 },
+                768: { items: 2 },
+                992: { items: 3 }
+            }
+        });
+
+    })(jQuery);
+    </script>
+</body>
+</html>

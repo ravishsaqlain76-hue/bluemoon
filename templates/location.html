@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Guest House in F-6/2 Islamabad | Blue Moon Residency{% endif %}{% endblock %}
+{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Looking for a guest house in F-6/2 Islamabad? Blue Moon Residency offers comfortable rooms from PKR 5,500/night, free Wi-Fi, parking, near Faisal Mosque. Pay at check-in!{% endif %}{% endblock %}
+{% block meta_keywords %}guest house in F6/2 islamabad, guest house near me islamabad, best guest house islamabad, hotel F-6 islamabad, blue moon residency, accommodation islamabad F6{% endblock %}
+{% block og_title %}Guest House in F-6/2 Islamabad | Blue Moon Residency{% endblock %}
+{% block og_description %}Looking for a guest house in F-6/2 Islamabad? Blue Moon Residency offers comfortable rooms, modern amenities, and warm hospitality.{% endblock %}
+
+{% block extra_schema %}
+{% include 'includes/faq_schema.html' %}
+{% include 'includes/review_schema.html' %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Home","item":"{{ SITE_URL }}/"},
+  {"@type":"ListItem","position":2,"name":"Guest House in F-6/2 Islamabad","item":"{{ SITE_URL }}/guest-house-in-f6-2-islamabad/"}
+]}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .map-container iframe { border-radius: 8px; width: 100%; height: 400px; border: 0; }
+  .attraction-badge { display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px; background: #f1f5f9; border-radius: 20px; font-size: 0.85rem; margin: 4px; }
+  .stars { color: #f59f00; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+  <div class="container-xl">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active">Guest House in F-6/2 Islamabad</li>
+    </ol></nav>
+    <h1 class="page-title">Guest House in F-6/2 Islamabad</h1>
+    <div class="page-pretitle">Blue Moon Residency &mdash; Your Home Away From Home</div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row">
+      <div class="col-lg-8">
+        <article class="card mb-4"><div class="card-body">
+          <h2>About Blue Moon Residency &mdash; F-6/2 Islamabad</h2>
+          <p>
+            <strong>Blue Moon Residency</strong> is a trusted and well-established <strong>guest house in F-6/2 Islamabad</strong>,
+            offering comfortable accommodation for business travelers, tourists, families, and medical visitors.
+            Located at <strong>House # 2-A, Justice Abdul Rasheed Road, F-6/2</strong>, our guest house sits in
+            one of Islamabad's most sought-after residential areas.
+          </p>
+
+          <h3>Our Location in Islamabad</h3>
+          <p>
+            F-6/2 is one of the most central and well-connected sectors in Islamabad, giving our guests
+            easy access to the city's major landmarks, hospitals, embassies, and commercial areas. Whether
+            you're searching for a <strong>guest house near Faisal Mosque</strong>, a <strong>hotel near
+            Margalla Hills</strong>, or <strong>accommodation in Islamabad</strong> for a short or extended
+            stay, Blue Moon Residency is the ideal choice.
+          </p>
+
+          <h3>Nearby Landmarks &amp; Attractions</h3>
+          {% if attractions %}
+          <div class="mb-3">
+            {% for a in attractions %}
+              <span class="attraction-badge">{{ a.name }} &mdash; {{ a.distance }}</span>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="mb-3">
+            <span class="attraction-badge">Faisal Mosque &mdash; 5 min</span>
+            <span class="attraction-badge">Margalla Hills Trails &mdash; 10 min</span>
+            <span class="attraction-badge">Centaurus Mall &mdash; 8 min</span>
+            <span class="attraction-badge">PIMS Hospital &mdash; 12 min</span>
+            <span class="attraction-badge">Serena Hotel &mdash; 7 min</span>
+            <span class="attraction-badge">Diplomatic Enclave &mdash; 10 min</span>
+            <span class="attraction-badge">F-6 Markaz (Super Market) &mdash; 3 min walk</span>
+            <span class="attraction-badge">Islamabad International Airport &mdash; 30 min</span>
+          </div>
+          {% endif %}
+
+          <h3>What We Offer</h3>
+          <div class="row mb-3">
+            <div class="col-md-6"><ul>
+              <li>Fully furnished Standard, Deluxe, Suite &amp; Family rooms</li>
+              <li>High-speed Wi-Fi throughout the property</li>
+              <li>Air conditioning and heating</li>
+              <li>24/7 front desk and room service</li>
+            </ul></div>
+            <div class="col-md-6"><ul>
+              <li>Secure parking facility</li>
+              <li>Daily housekeeping</li>
+              <li>Laundry services</li>
+              <li>Airport pickup available on request</li>
+            </ul></div>
+          </div>
+
+          <h3>Ideal For</h3>
+          <p>
+            Our guest house in Islamabad is ideal for corporate travelers attending meetings in the Blue Area,
+            tourists exploring Islamabad and Rawalpindi, families visiting for events, and medical patients
+            visiting nearby hospitals. We offer flexible check-in and check-out, daily and monthly rates,
+            and a warm, home-like atmosphere.
+          </p>
+
+          <div class="mt-4">
+            <a href="{% url 'rooms:room_list' %}" class="btn btn-primary btn-lg">Browse Available Rooms</a>
+            <a href="{% url 'contact' %}" class="btn btn-outline-primary btn-lg ms-2">Contact Us</a>
+          </div>
+        </div></article>
+
+        <!-- Available Rooms -->
+        {% if rooms %}
+        <div class="card mb-4"><div class="card-header"><h3 class="card-title">Available Rooms at Blue Moon Residency</h3></div>
+          <div class="table-responsive">
+            <table class="table table-vcenter card-table"><thead><tr>
+              <th>Room</th><th>Type</th><th>Capacity</th><th>Price / Night</th><th></th>
+            </tr></thead><tbody>
+              {% for room in rooms %}
+              <tr>
+                <td><strong>{{ room.name }}</strong></td>
+                <td><span class="badge bg-blue-lt">{{ room.get_room_type_display }}</span></td>
+                <td>{{ room.capacity }} guests</td>
+                <td>PKR {{ room.price_per_night|floatformat:"0"|intcomma }}</td>
+                <td><a href="{% url 'rooms:room_detail' room.slug %}" class="btn btn-sm btn-primary">View</a></td>
+              </tr>
+              {% endfor %}
+            </tbody></table>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Testimonials -->
+        {% if testimonials %}
+        <div class="card mb-4"><div class="card-header"><h3 class="card-title">Guest Reviews</h3></div><div class="card-body">
+          {% for t in testimonials %}
+          <div class="{% if not forloop.last %}mb-3 pb-3 border-bottom{% endif %}">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong>{{ t.name }}</strong>
+              <span class="stars">{% for i in "12345" %}{% if forloop.counter <= t.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span>
+            </div>
+            <p class="text-muted mb-1">{{ t.text }}</p>
+            <small class="text-muted">{% if t.room_type %}{{ t.room_type }} &middot; {% endif %}{{ t.date|date:"M Y" }}{% if t.location %} &middot; {{ t.location }}{% endif %}</small>
+          </div>
+          {% endfor %}
+        </div></div>
+        {% endif %}
+
+        <!-- FAQ -->
+        {% if faqs %}
+        <div class="card mb-4"><div class="card-header"><h3 class="card-title">Frequently Asked Questions</h3></div><div class="card-body">
+          <div class="accordion" id="faq-loc">
+            {% for faq in faqs %}
+            <div class="accordion-item">
+              <h3 class="accordion-header"><button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq-loc-{{ faq.pk }}">{{ faq.question }}</button></h3>
+              <div id="faq-loc-{{ faq.pk }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#faq-loc"><div class="accordion-body text-muted">{{ faq.answer }}</div></div>
+            </div>
+            {% endfor %}
+          </div>
+        </div></div>
+        {% endif %}
+      </div>
+
+      <!-- Sidebar -->
+      <div class="col-lg-4">
+        <div class="card mb-3"><div class="card-header"><h3 class="card-title">Our Location</h3></div>
+          <div class="card-body p-2"><div class="map-container"><iframe src="{{ business.google_maps_embed_url }}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Blue Moon Residency Map - F-6/2 Islamabad"></iframe></div></div>
+        </div>
+        <div class="card mb-3"><div class="card-body">
+          <strong>Blue Moon Residency</strong><br>
+          {{ business.street_address }}<br>F-6/2, {{ business.locality }}, Pakistan<br>
+          {% if business.phone %}<a href="tel:{{ business.phone }}">{{ business.phone }}</a><br>{% endif %}
+          {% if business.email %}<a href="mailto:{{ business.email }}">{{ business.email }}</a>{% endif %}
+          <div class="mt-3"><a href="{% url 'contact' %}" class="btn btn-primary w-100">Send Us a Message</a></div>
+        </div></div>
+        <div class="card bg-primary-lt"><div class="card-body text-center">
+          <h3 class="card-title">Ready to Book?</h3>
+          <p class="text-muted mb-2">No upfront payment. Pay at check-in.</p>
+          <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">Book a Room</a>
+        </div></div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

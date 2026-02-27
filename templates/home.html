@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Blue Moon Residency | Best Guest House in F6/2 Islamabad{% endif %}{% endblock %}
+{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Blue Moon Residency is a premium guest house in F-6/2 Islamabad. Comfortable rooms from PKR 5,500/night, free Wi-Fi, parking, near Faisal Mosque. Book now — pay at check-in!{% endif %}{% endblock %}
+{% block meta_keywords %}{% if page_seo.keywords %}{{ page_seo.keywords }}{% else %}guest house islamabad, guest house F6/2, blue moon residency, hotel near me islamabad, guest house near faisal mosque, accommodation islamabad, guest house in islamabad{% endif %}{% endblock %}
+{% block og_title %}Blue Moon Residency | Best Guest House in F6/2 Islamabad{% endblock %}
+{% block og_description %}Premium guest house in F-6/2 Islamabad. Comfortable rooms, free Wi-Fi, near Faisal Mosque. Pay at check-in!{% endblock %}
+
+{% block extra_schema %}
+{% include 'includes/faq_schema.html' %}
+{% include 'includes/review_schema.html' %}
+{% endblock %}
+
+{% block nav_home %}active{% endblock %}
+
+{% block extra_css %}
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    padding: 4rem 0;
+    color: white;
+    margin-top: -1px;
+  }
+  .hero-section h1 { font-size: 2.8rem; font-weight: 800; color: #c5a04e; }
+  .search-card {
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  .feature-icon {
+    width: 48px; height: 48px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 12px;
+    background: rgba(32, 107, 196, 0.1); color: #206bc4;
+  }
+  .map-container iframe { border-radius: 8px; width: 100%; height: 300px; border: 0; }
+  .stars { color: #f59f00; }
+  .attraction-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 6px 12px; background: #f1f5f9; border-radius: 20px;
+    font-size: 0.85rem; margin: 4px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col-lg-8 mx-auto text-center">
+        <img src="{% static 'pak.png' %}" alt="Blue Moon Residency - Guest House in F-6/2 Islamabad" height="120" class="mb-3">
+        <h1 class="mb-3">Blue Moon Residency</h1>
+        <p class="lead text-white-50 mb-1">Premium <strong>Guest House in F-6/2 Islamabad</strong></p>
+        <p class="text-white-50 mb-0">Comfortable rooms &middot; Free Wi-Fi & Parking &middot; Near Faisal Mosque &middot; Pay at check-in</p>
+        {% if review_count > 0 %}
+          <div class="mt-2">
+            <span class="stars">{% for i in "12345" %}{% if forloop.counter <= review_avg|floatformat:"0"|add:"0" %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span>
+            <span class="text-white-50">{{ review_avg }}/5 from {{ review_count }} reviews</span>
+          </div>
+        {% endif %}
+
+        <div class="search-card">
+          <form method="get" action="{% url 'rooms:room_list' %}">
+            <div class="row g-3 align-items-end">
+              <div class="col-md-3">
+                <label class="form-label text-dark">Check-in</label>
+                <input type="date" name="check_in" class="form-control">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label text-dark">Check-out</label>
+                <input type="date" name="check_out" class="form-control">
+              </div>
+              <div class="col-md-3">
+                <label class="form-label text-dark">Guests</label>
+                <select name="capacity" class="form-select">
+                  <option value="">Any</option>
+                  <option value="1">1 Guest</option>
+                  <option value="2">2 Guests</option>
+                  <option value="4">4+ Guests</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100">Search Rooms</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="page-body">
+  <div class="container-xl">
+
+    <!-- Featured Rooms -->
+    {% if featured_rooms %}
+    <section class="mb-4 mt-4">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="mb-0">Featured Rooms at Our Islamabad Guest House</h2>
+        <a href="{% url 'rooms:room_list' %}" class="btn btn-ghost-primary">View All Rooms</a>
+      </div>
+      <div class="row row-cards">
+        {% for room in featured_rooms %}
+        <div class="col-sm-6 col-lg-3 fade-in-section">
+          <div class="card">
+            {% if room.primary_image %}
+              <img src="{{ room.primary_image.image.url }}" class="card-img-top" alt="{{ room.name }} - Guest House Room in F-6/2 Islamabad" loading="lazy" style="height: 180px; object-fit: cover;">
+            {% else %}
+              <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 180px;">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-lg text-muted" width="40" height="40" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none"><path d="M3 7v11m0 -4h18m0 4v-8a2 2 0 0 0 -2 -2h-8v6"/><circle cx="7" cy="10" r="1"/></svg>
+              </div>
+            {% endif %}
+            <div class="card-body">
+              <h3 class="card-title mb-1">{{ room.name }}</h3>
+              <div class="text-muted mb-2">{{ room.get_room_type_display }} &middot; {{ room.capacity }} guests</div>
+              <div class="d-flex align-items-center justify-content-between">
+                <span><strong>PKR {{ room.price_per_night|floatformat:"0"|intcomma }}</strong> <small class="text-muted">/ night</small></span>
+                <a href="{% url 'rooms:room_detail' room.slug %}" class="btn btn-primary btn-sm">View</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- About & Location Section -->
+    <section class="card mb-4 fade-in-section">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-7">
+            <h2>Best Guest House in F-6/2 Islamabad</h2>
+            <p>
+              <strong>Blue Moon Residency</strong> is a top-rated guest house at
+              <strong>House # 2-A, Justice Abdul Rasheed Road, F-6/2, Islamabad</strong>.
+              Whether you are visiting for business, tourism, or medical purposes,
+              our guest house provides comfortable accommodation in one of Islamabad's
+              most prestigious neighborhoods.
+            </p>
+            <p>
+              Situated in the heart of <strong>F-6 Islamabad</strong>, we are minutes from
+              Faisal Mosque, Margalla Hills, Centaurus Mall, and major hospitals.
+              Rooms start from <strong>PKR 5,500/night</strong> with no advance payment required.
+            </p>
+            <h3>Why Guests Choose Blue Moon</h3>
+            <ul class="list-unstyled">
+              {% for point in "Prime location in F-6/2 — walk to Super Market in 3 minutes,Free Wi-Fi and air conditioning in every room,24/7 front desk and daily housekeeping,Secure free parking on premises,Pay at check-in — no advance payment needed,Airport pickup available on request"|make_list %}{% endfor %}
+              <li class="d-flex align-items-start mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="icon text-success me-2 mt-1 flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path d="M5 12l5 5l10 -10"/></svg> Prime location in F-6/2 — walk to Super Market in 3 minutes</li>
+              <li class="d-flex align-items-start mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="icon text-success me-2 mt-1 flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path d="M5 12l5 5l10 -10"/></svg> Free Wi-Fi and air conditioning in every room</li>
+              <li class="d-flex align-items-start mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="icon text-success me-2 mt-1 flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path d="M5 12l5 5l10 -10"/></svg> 24/7 front desk and daily housekeeping</li>
+              <li class="d-flex align-items-start mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="icon text-success me-2 mt-1 flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path d="M5 12l5 5l10 -10"/></svg> Secure free parking on premises</li>
+              <li class="d-flex align-items-start mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="icon text-success me-2 mt-1 flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path d="M5 12l5 5l10 -10"/></svg> Pay at check-in — no advance payment needed</li>
+              <li class="d-flex align-items-start mb-2"><svg xmlns="http://www.w3.org/2000/svg" class="icon text-success me-2 mt-1 flex-shrink-0" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path d="M5 12l5 5l10 -10"/></svg> Airport pickup available on request</li>
+            </ul>
+            <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">View Available Rooms</a>
+            <a href="{% url 'location_landing' %}" class="btn btn-ghost-primary ms-2">More About Our Location</a>
+          </div>
+          <div class="col-lg-5 mt-3 mt-lg-0">
+            <div class="map-container">
+              <iframe src="{{ business.google_maps_embed_url }}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Blue Moon Residency Location - F-6/2 Islamabad"></iframe>
+            </div>
+            <div class="mt-2 text-muted"><small>{{ business.street_address }}, F-6/2, {{ business.locality }}, Pakistan</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Nearby Attractions -->
+    {% if attractions %}
+    <section class="card mb-4">
+      <div class="card-header"><h3 class="card-title">Nearby Landmarks &amp; Attractions</h3></div>
+      <div class="card-body">
+        {% for a in attractions %}
+          <span class="attraction-badge">{{ a.name }} — {{ a.distance }}</span>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- Guest Reviews / Testimonials -->
+    {% if testimonials %}
+    <section class="mb-4">
+      <h2 class="mb-3">What Our Guests Say</h2>
+      <div class="row row-cards">
+        {% for t in testimonials %}
+        <div class="col-md-6 col-lg-4 fade-in-section">
+          <div class="card">
+            <div class="card-body">
+              <div class="d-flex align-items-center mb-2">
+                <span class="avatar avatar-sm bg-blue-lt me-2">{{ t.name|make_list|first|upper }}</span>
+                <div>
+                  <strong>{{ t.name }}</strong>
+                  {% if t.location %}<br><small class="text-muted">{{ t.location }}</small>{% endif %}
+                </div>
+                <div class="ms-auto stars">{% for i in "12345" %}{% if forloop.counter <= t.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</div>
+              </div>
+              <p class="text-muted mb-1">{{ t.text|truncatewords:40 }}</p>
+              <small class="text-muted">{% if t.room_type %}{{ t.room_type }} &middot; {% endif %}{{ t.date|date:"M Y" }}</small>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- FAQ Section -->
+    {% if faqs %}
+    <section class="mb-4 fade-in-section">
+      <h2 class="mb-3">Frequently Asked Questions</h2>
+      <div class="card">
+        <div class="card-body">
+          <div class="accordion" id="faq-accordion">
+            {% for faq in faqs %}
+            <div class="accordion-item">
+              <h3 class="accordion-header">
+                <button class="accordion-button {% if not forloop.first %}collapsed{% endif %}" type="button" data-bs-toggle="collapse" data-bs-target="#faq-{{ faq.pk }}">
+                  {{ faq.question }}
+                </button>
+              </h3>
+              <div id="faq-{{ faq.pk }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" data-bs-parent="#faq-accordion">
+                <div class="accordion-body text-muted">{{ faq.answer }}</div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <!-- Why Choose Us -->
+    <section class="mb-4">
+      <h2 class="text-center mb-4">Why Choose Blue Moon Residency?</h2>
+      <div class="row row-cards">
+        <div class="col-sm-6 col-lg-3">
+          <div class="card"><div class="card-body text-center">
+            <div class="feature-icon mx-auto mb-3"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path d="M3 7v11m0 -4h18m0 4v-8a2 2 0 0 0 -2 -2h-8v6"/><circle cx="7" cy="10" r="1"/></svg></div>
+            <h3 class="card-title">Comfortable Rooms</h3>
+            <p class="text-muted">Spacious, well-furnished rooms in F-6/2 Islamabad with AC, Wi-Fi, and daily housekeeping.</p>
+          </div></div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card"><div class="card-body text-center">
+            <div class="feature-icon mx-auto mb-3"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/></svg></div>
+            <h3 class="card-title">Top-Rated Service</h3>
+            <p class="text-muted">Rated {{ review_avg }}/5 by our guests. Dedicated staff providing warm Pakistani hospitality.</p>
+          </div></div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card"><div class="card-body text-center">
+            <div class="feature-icon mx-auto mb-3"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><circle cx="12" cy="12" r="9"/><path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"/><path d="M12 7v10"/></svg></div>
+            <h3 class="card-title">Best Value in Islamabad</h3>
+            <p class="text-muted">Rooms from PKR 5,500/night. No hidden fees, no advance payment. Pay at check-in.</p>
+          </div></div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="card"><div class="card-body text-center">
+            <div class="feature-icon mx-auto mb-3"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"><path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"/></svg></div>
+            <h3 class="card-title">Prime Location</h3>
+            <p class="text-muted">F-6/2 Islamabad. 5 min to Faisal Mosque, 3 min walk to Super Market, 10 min to Margalla Hills.</p>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% if review_count > 0 %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Hotel",
+  "name": "{{ seo_settings.business_name }}",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ review_avg }}",
+    "bestRating": "5",
+    "worstRating": "1",
+    "reviewCount": "{{ review_count }}"
+  }{% if testimonials %},
+  "review": [
+    {% for t in testimonials %}
+    {
+      "@type": "Review",
+      "author": {"@type": "Person", "name": "{{ t.name|escapejs }}"},
+      "datePublished": "{{ t.date|date:'Y-m-d' }}",
+      "reviewBody": "{{ t.text|escapejs }}",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "{{ t.rating }}",
+        "bestRating": "5"
+      }
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]{% endif %}
+}
+</script>
+{% endif %}

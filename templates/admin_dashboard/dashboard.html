@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Admin Dashboard | Blue Moon{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+  <div class="container-xl">
+    <div class="page-pretitle">Administration</div>
+    <h2 class="page-title">Booking Analytics</h2>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    <!-- Stat Cards -->
+    <div class="row row-deck row-cards mb-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="subheader">Total Bookings</div>
+            <div class="h1 mb-0">{{ total_bookings }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="subheader">Active Bookings</div>
+            <div class="h1 mb-0">{{ active_bookings }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="subheader">Total Revenue</div>
+            <div class="h1 mb-0">${{ total_revenue|intcomma }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="subheader">New (30 days)</div>
+            <div class="h1 mb-0">{{ new_bookings_month }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Revenue Chart -->
+    {% if chart_labels %}
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3 class="card-title">Monthly Revenue</h3>
+        </div>
+        <div class="card-body">
+          <div id="revenue-chart" style="height: 300px;"></div>
+        </div>
+      </div>
+    {% endif %}
+
+    <!-- Recent Bookings Table -->
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Recent Bookings</h3>
+      </div>
+      {% if recent_bookings %}
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+              <tr>
+                <th>Reference</th>
+                <th>Guest</th>
+                <th>Room</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Booked On</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for booking in recent_bookings %}
+                <tr>
+                  <td><strong>{{ booking.booking_reference }}</strong></td>
+                  <td>{{ booking.guest_display_name }}</td>
+                  <td>{{ booking.room.name }}</td>
+                  <td>{{ booking.check_in|date:"M d, Y" }}</td>
+                  <td>{{ booking.check_out|date:"M d, Y" }}</td>
+                  <td>${{ booking.total_price|intcomma }}</td>
+                  <td>
+                    <span class="badge
+                      {% if booking.status == 'confirmed' %}bg-success
+                      {% elif booking.status == 'pending' %}bg-warning
+                      {% elif booking.status == 'cancelled' %}bg-danger
+                      {% elif booking.status == 'completed' %}bg-info
+                      {% endif %}">
+                      {{ booking.get_status_display }}
+                    </span>
+                  </td>
+                  <td>{{ booking.created_at|date:"M d, Y" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="card-body">
+          <div class="empty">
+            <p class="empty-title">No bookings yet</p>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% if chart_labels %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+  var options = {
+    chart: {
+      type: 'bar',
+      height: 300,
+      toolbar: { show: false }
+    },
+    series: [{
+      name: 'Revenue',
+      data: {{ chart_data }}
+    }],
+    xaxis: {
+      categories: {{ chart_labels|safe }}
+    },
+    yaxis: {
+      labels: {
+        formatter: function(val) { return '$' + val.toLocaleString(); }
+      }
+    },
+    colors: ['#206bc4'],
+    dataLabels: { enabled: false },
+    plotOptions: {
+      bar: { borderRadius: 4 }
+    }
+  };
+  var chart = new ApexCharts(document.querySelector("#revenue-chart"), options);
+  chart.render();
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Rooms & Prices | Blue Moon Residency Guest House Islamabad{% endif %}{% endblock %}
+{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Browse rooms at Blue Moon Residency, F-6/2 Islamabad. Standard, Deluxe, Suite & Family rooms from PKR 5,500/night. Free Wi-Fi, AC, parking. Pay at check-in!{% endif %}{% endblock %}
+{% block meta_keywords %}guest house rooms islamabad, hotel rooms F-6 islamabad, blue moon residency rooms, cheap rooms islamabad, guest house rates islamabad{% endblock %}
+{% block og_title %}Rooms & Prices | Blue Moon Residency Islamabad{% endblock %}
+{% block og_description %}Browse rooms from PKR 5,500/night at Blue Moon Residency, F-6/2 Islamabad. No advance payment required.{% endblock %}
+{% block nav_rooms %}active{% endblock %}
+
+{% block extra_schema %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Home","item":"{{ SITE_URL }}/"},
+  {"@type":"ListItem","position":2,"name":"Rooms","item":"{{ SITE_URL }}/rooms/"}
+]}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+  <div class="container-xl">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active">Rooms</li>
+    </ol></nav>
+    <h1 class="page-title">Guest House Rooms in F-6/2 Islamabad</h1>
+    <div class="page-pretitle">Blue Moon Residency — Accommodation</div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    <!-- Filters -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+          <div class="col-md-2">
+            <label class="form-label">Room Type</label>
+            <select name="type" class="form-select">
+              <option value="">All Types</option>
+              {% for value, label in room_types %}
+                <option value="{{ value }}" {% if current_type == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Min Price (PKR)</label>
+            <input type="number" name="min_price" class="form-control" placeholder="0" value="{{ current_min_price }}">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Max Price (PKR)</label>
+            <input type="number" name="max_price" class="form-control" placeholder="Any" value="{{ current_max_price }}">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Guests</label>
+            <input type="number" name="capacity" class="form-control" placeholder="Any" min="1" value="{{ current_capacity }}">
+          </div>
+          <div class="col-md-2">
+            <label class="form-label">Sort By</label>
+            <select name="sort" class="form-select">
+              <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name</option>
+              <option value="price_low" {% if current_sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+              <option value="price_high" {% if current_sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
+              <option value="capacity" {% if current_sort == 'capacity' %}selected{% endif %}>Capacity</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Room Cards -->
+    {% if rooms %}
+      <div class="row row-cards">
+        {% for room in rooms %}
+          <div class="col-sm-6 col-lg-4">
+            <div class="card">
+              {% if room.primary_image %}
+                <img src="{{ room.primary_image.image.url }}" class="card-img-top" alt="{{ room.name }} - Guest House Room in Islamabad" loading="lazy" style="height: 220px; object-fit: cover;">
+              {% else %}
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-light" style="height: 220px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-lg text-muted" width="48" height="48" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none">
+                    <path d="M3 7v11m0 -4h18m0 4v-8a2 2 0 0 0 -2 -2h-8v6"/>
+                    <circle cx="7" cy="10" r="1"/>
+                  </svg>
+                </div>
+              {% endif %}
+              <div class="card-body">
+                <div class="d-flex align-items-center mb-2">
+                  <h3 class="card-title mb-0">{{ room.name }}</h3>
+                  <span class="badge bg-blue-lt ms-auto">{{ room.get_room_type_display }}</span>
+                </div>
+                <p class="text-muted">{{ room.description|truncatewords:20 }}</p>
+                <div class="d-flex align-items-center mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon me-1" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                    <path d="M16 7a4 4 0 1 1 -8 0a4 4 0 0 1 8 0"/>
+                    <path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"/>
+                  </svg>
+                  <span class="text-muted">Up to {{ room.capacity }} guests</span>
+                </div>
+                <div class="d-flex align-items-center justify-content-between mt-3">
+                  <div>
+                    <span class="h3 mb-0">PKR {{ room.price_per_night|floatformat:"0"|intcomma }}</span>
+                    <span class="text-muted">/ night</span>
+                  </div>
+                  <a href="{% url 'rooms:room_detail' room.slug %}" class="btn btn-primary">View Details</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if rooms.has_other_pages %}
+        <div class="d-flex justify-content-center mt-4">
+          <ul class="pagination">
+            {% if rooms.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ rooms.previous_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_min_price %}&min_price={{ current_min_price }}{% endif %}{% if current_max_price %}&max_price={{ current_max_price }}{% endif %}{% if current_capacity %}&capacity={{ current_capacity }}{% endif %}">
+                  Previous
+                </a>
+              </li>
+            {% endif %}
+            {% for num in rooms.paginator.page_range %}
+              <li class="page-item {% if rooms.number == num %}active{% endif %}">
+                <a class="page-link" href="?page={{ num }}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_min_price %}&min_price={{ current_min_price }}{% endif %}{% if current_max_price %}&max_price={{ current_max_price }}{% endif %}{% if current_capacity %}&capacity={{ current_capacity }}{% endif %}">{{ num }}</a>
+              </li>
+            {% endfor %}
+            {% if rooms.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ rooms.next_page_number }}{% if current_type %}&type={{ current_type }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}{% if current_min_price %}&min_price={{ current_min_price }}{% endif %}{% if current_max_price %}&max_price={{ current_max_price }}{% endif %}{% if current_capacity %}&capacity={{ current_capacity }}{% endif %}">
+                  Next
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      {% endif %}
+    {% else %}
+      <div class="empty">
+        <p class="empty-title">No rooms found</p>
+        <p class="empty-subtitle text-muted">Try adjusting your filters or check back later.</p>
+        <div class="empty-action">
+          <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">Clear Filters</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

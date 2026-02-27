@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile | Blue Moon{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+  <div class="container-xl">
+    <div class="page-pretitle">Account</div>
+    <h2 class="page-title">My Profile</h2>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Profile Settings</h3>
+          </div>
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">First Name</label>
+                  <input type="text" name="first_name" class="form-control {% if form.first_name.errors %}is-invalid{% endif %}" value="{{ form.first_name.value|default:'' }}">
+                  {% if form.first_name.errors %}
+                    <div class="invalid-feedback">{{ form.first_name.errors.0 }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Last Name</label>
+                  <input type="text" name="last_name" class="form-control {% if form.last_name.errors %}is-invalid{% endif %}" value="{{ form.last_name.value|default:'' }}">
+                  {% if form.last_name.errors %}
+                    <div class="invalid-feedback">{{ form.last_name.errors.0 }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control {% if form.email.errors %}is-invalid{% endif %}" value="{{ form.email.value|default:'' }}">
+                {% if form.email.errors %}
+                  <div class="invalid-feedback">{{ form.email.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input type="text" name="phone" class="form-control {% if form.phone.errors %}is-invalid{% endif %}" value="{{ form.phone.value|default:'' }}" placeholder="Your phone number">
+                {% if form.phone.errors %}
+                  <div class="invalid-feedback">{{ form.phone.errors.0 }}</div>
+                {% endif %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Avatar</label>
+                <input type="file" name="avatar" class="form-control" accept="image/*">
+                {% if form.instance.avatar %}
+                  <div class="mt-2">
+                    <img src="{{ form.instance.avatar.url }}" alt="Avatar" class="avatar avatar-lg">
+                  </div>
+                {% endif %}
+              </div>
+              <div class="card-footer text-end bg-transparent border-0 px-0">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

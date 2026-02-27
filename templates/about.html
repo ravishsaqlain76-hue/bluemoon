@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}About Us | Blue Moon Residency - Guest House in Islamabad{% endif %}{% endblock %}
+{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Learn about Blue Moon Residency, a premium guest house in F-6/2 Islamabad offering comfortable accommodation, modern amenities, and warm Pakistani hospitality.{% endif %}{% endblock %}
+{% block og_title %}About Blue Moon Residency | Guest House in Islamabad{% endblock %}
+{% block og_description %}Learn about Blue Moon Residency, a premium guest house in F-6/2 Islamabad offering comfortable rooms and warm hospitality.{% endblock %}
+
+{% block extra_schema %}
+{% include 'includes/review_schema.html' %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":"Home","item":"{{ SITE_URL }}/"},
+  {"@type":"ListItem","position":2,"name":"About","item":"{{ SITE_URL }}/about/"}
+]}
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .stars { color: #f59f00; }
+</style>
+{% endblock %}
+
+{% block nav_about %}active{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+  <div class="container-xl">
+    <nav aria-label="breadcrumb"><ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item active">About</li>
+    </ol></nav>
+    <h1 class="page-title">About Blue Moon Residency</h1>
+    <div class="page-pretitle">Who We Are</div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="card mb-4">
+          <div class="card-body">
+            <h2>Your Trusted Guest House in Islamabad</h2>
+            <p>
+              <strong>Blue Moon Residency</strong> is a well-established guest house situated in the prestigious
+              <strong>F-6/2 sector of Islamabad</strong>, Pakistan. We have been providing quality accommodation
+              to travelers, business professionals, and families who seek a comfortable, clean, and affordable
+              place to stay in the heart of the capital.
+            </p>
+            <p>
+              Our property at <strong>House # 2-A, Justice Abdul Rasheed Road</strong> offers a peaceful retreat
+              with all modern amenities, while keeping you connected to Islamabad's vibrant city life.
+              Whether you need a short overnight stay or extended accommodation, Blue Moon Residency
+              delivers a home-like experience with professional service.
+            </p>
+
+            <h3>Our Mission</h3>
+            <p>
+              To provide every guest with a clean, safe, and comfortable stay at an affordable price.
+              We believe in honest hospitality, transparent pricing, and making every visitor feel welcome
+              in Islamabad.
+            </p>
+
+            <h3>What Sets Us Apart</h3>
+            <div class="row mt-3">
+              <div class="col-md-6">
+                <div class="d-flex mb-3">
+                  <div class="me-3">
+                    <span class="avatar bg-blue-lt">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"/>
+                      </svg>
+                    </span>
+                  </div>
+                  <div>
+                    <strong>Prime Location</strong>
+                    <p class="text-muted mb-0">In F-6/2, minutes from Faisal Mosque, Margalla Hills, and major hospitals.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex mb-3">
+                  <div class="me-3">
+                    <span class="avatar bg-green-lt">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <path d="M3 7v11m0 -4h18m0 4v-8a2 2 0 0 0 -2 -2h-8v6"/>
+                        <circle cx="7" cy="10" r="1"/>
+                      </svg>
+                    </span>
+                  </div>
+                  <div>
+                    <strong>Modern Rooms</strong>
+                    <p class="text-muted mb-0">Fully furnished with AC, Wi-Fi, TV, and en-suite bathrooms.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex mb-3">
+                  <div class="me-3">
+                    <span class="avatar bg-yellow-lt">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"/>
+                      </svg>
+                    </span>
+                  </div>
+                  <div>
+                    <strong>Warm Hospitality</strong>
+                    <p class="text-muted mb-0">Friendly staff dedicated to making your stay memorable.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="d-flex mb-3">
+                  <div class="me-3">
+                    <span class="avatar bg-red-lt">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                        <circle cx="12" cy="12" r="9"/>
+                        <path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"/>
+                        <path d="M12 7v10"/>
+                      </svg>
+                    </span>
+                  </div>
+                  <div>
+                    <strong>Affordable Rates</strong>
+                    <p class="text-muted mb-0">No upfront payment. Transparent pricing with no hidden charges.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">View Our Rooms</a>
+              <a href="{% url 'contact' %}" class="btn btn-outline-primary ms-2">Get in Touch</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Guest Reviews -->
+        {% if testimonials %}
+        <div class="card mb-4"><div class="card-header"><h3 class="card-title">What Our Guests Say</h3></div>
+          <div class="card-body">
+            {% for t in testimonials %}
+            <div class="{% if not forloop.last %}mb-3 pb-3 border-bottom{% endif %}">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <strong>{{ t.name }}</strong>
+                <span class="stars">{% for i in "12345" %}{% if forloop.counter <= t.rating %}&#9733;{% else %}&#9734;{% endif %}{% endfor %}</span>
+              </div>
+              <p class="text-muted mb-1">{{ t.text }}</p>
+              <small class="text-muted">{% if t.room_type %}{{ t.room_type }} &middot; {% endif %}{{ t.date|date:"M Y" }}{% if t.location %} &middot; {{ t.location }}{% endif %}</small>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

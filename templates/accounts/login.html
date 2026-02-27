@@ -1,0 +1,41 @@
+{% extends 'base_auth.html' %}
+
+{% block title %}Login | Blue Moon{% endblock %}
+
+{% block content %}
+<div class="card card-md">
+  <div class="card-body">
+    <h2 class="h2 text-center mb-4">Login to your account</h2>
+    <form method="post" autocomplete="off">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" placeholder="Your username" autocomplete="off" required value="{{ form.username.value|default:'' }}">
+        {% if form.username.errors %}
+          <div class="invalid-feedback d-block">{{ form.username.errors.0 }}</div>
+        {% endif %}
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Your password" autocomplete="off" required>
+        {% if form.password.errors %}
+          <div class="invalid-feedback d-block">{{ form.password.errors.0 }}</div>
+        {% endif %}
+      </div>
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="form-footer">
+        <button type="submit" class="btn btn-primary w-100">Sign in</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="text-center text-muted mt-3">
+  Don't have an account? <a href="{% url 'accounts:register' %}" tabindex="-1">Register</a>
+</div>
+{% endblock %}

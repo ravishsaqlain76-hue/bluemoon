@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block title %}Book {{ room.name }} | Blue Moon{% endblock %}
+{% block nav_rooms %}active{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+  <div class="container-xl">
+    <div class="page-pretitle">
+      <a href="{% url 'rooms:room_list' %}" class="text-muted">Rooms</a> /
+      <a href="{% url 'rooms:room_detail' room.slug %}" class="text-muted">{{ room.name }}</a> /
+    </div>
+    <h2 class="page-title">Book This Room</h2>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    <!-- Login Banner -->
+    <div class="alert alert-info mb-4" role="alert">
+      <div class="d-flex align-items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+          <path d="M12 8v4"/>
+          <path d="M12 16h.01"/>
+        </svg>
+        <div>Already have an account? <a href="{% url 'accounts:login' %}?next={% url 'bookings:booking_create' room.pk %}">Login here</a> to manage your bookings from your dashboard.</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Your Details</h3>
+          </div>
+          <div class="card-body">
+            <form method="post" id="booking-form">
+              {% csrf_token %}
+              <!-- Guest Info -->
+              <div class="row mb-3">
+                <div class="col-md-12">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" name="guest_name" class="form-control {% if form.guest_name.errors %}is-invalid{% endif %}" value="{{ form.guest_name.value|default:'' }}" placeholder="Full name" required>
+                  {% if form.guest_name.errors %}
+                    <div class="invalid-feedback">{{ form.guest_name.errors.0 }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Email Address</label>
+                  <input type="email" name="guest_email" class="form-control {% if form.guest_email.errors %}is-invalid{% endif %}" value="{{ form.guest_email.value|default:'' }}" placeholder="Email address" required>
+                  {% if form.guest_email.errors %}
+                    <div class="invalid-feedback">{{ form.guest_email.errors.0 }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Phone Number</label>
+                  <input type="tel" name="guest_phone" class="form-control {% if form.guest_phone.errors %}is-invalid{% endif %}" value="{{ form.guest_phone.value|default:'' }}" placeholder="Phone number" required>
+                  {% if form.guest_phone.errors %}
+                    <div class="invalid-feedback">{{ form.guest_phone.errors.0 }}</div>
+                  {% endif %}
+                </div>
+              </div>
+
+              <hr class="my-4">
+              <h3 class="mb-3">Booking Details</h3>
+
+              <!-- Dates -->
+              <div class="row mb-3">
+                <div class="col-md-6">
+                  <label class="form-label">Check-in Date</label>
+                  <input type="date" name="check_in" id="check_in" class="form-control {% if form.check_in.errors %}is-invalid{% endif %}" value="{{ form.check_in.value|default:'' }}" required>
+                  {% if form.check_in.errors %}
+                    <div class="invalid-feedback">{{ form.check_in.errors.0 }}</div>
+                  {% endif %}
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Check-out Date</label>
+                  <input type="date" name="check_out" id="check_out" class="form-control {% if form.check_out.errors %}is-invalid{% endif %}" value="{{ form.check_out.value|default:'' }}" required>
+                  {% if form.check_out.errors %}
+                    <div class="invalid-feedback">{{ form.check_out.errors.0 }}</div>
+                  {% endif %}
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Number of Guests</label>
+                <input type="number" name="guests" class="form-control {% if form.guests.errors %}is-invalid{% endif %}" min="1" max="{{ room.capacity }}" value="{{ form.guests.value|default:1 }}" required>
+                {% if form.guests.errors %}
+                  <div class="invalid-feedback">{{ form.guests.errors.0 }}</div>
+                {% endif %}
+                <small class="form-hint">Maximum {{ room.capacity }} guests for this room.</small>
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Special Requests <span class="text-muted">(optional)</span></label>
+                <textarea name="special_requests" class="form-control" rows="3" placeholder="Any special requests or preferences...">{{ form.special_requests.value|default:'' }}</textarea>
+              </div>
+              {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                  {% for error in form.non_field_errors %}
+                    <div>{{ error }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              <div class="d-flex justify-content-between">
+                <a href="{% url 'rooms:room_detail' room.slug %}" class="btn btn-ghost-secondary">Back to Room</a>
+                <button type="submit" class="btn btn-primary">Confirm Booking</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Price Breakdown Sidebar -->
+      <div class="col-lg-4">
+        <div class="card sticky-top" style="top: 1rem;">
+          <div class="card-header">
+            <h3 class="card-title">Price Breakdown</h3>
+          </div>
+          <div class="card-body">
+            <div class="mb-2">
+              <strong>{{ room.name }}</strong>
+              <br><span class="text-muted">{{ room.get_room_type_display }}</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Price per night</span>
+              <span>PKR {{ room.price_per_night|floatformat:"0"|intcomma }}</span>
+            </div>
+            <div class="d-flex justify-content-between mb-2">
+              <span>Number of nights</span>
+              <span id="num-nights">-</span>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+              <strong>Total</strong>
+              <strong id="total-price">-</strong>
+            </div>
+            <hr>
+            <div class="d-flex align-items-center text-muted">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+                <path d="M12 8v4"/>
+                <path d="M12 16h.01"/>
+              </svg>
+              <small>Pay at check-in — no upfront payment required</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const pricePerNight = {{ room.price_per_night }};
+  const checkInEl = document.getElementById('check_in');
+  const checkOutEl = document.getElementById('check_out');
+  const numNightsEl = document.getElementById('num-nights');
+  const totalPriceEl = document.getElementById('total-price');
+
+  function updatePrice() {
+    const checkIn = checkInEl.value;
+    const checkOut = checkOutEl.value;
+    if (checkIn && checkOut) {
+      const ci = new Date(checkIn);
+      const co = new Date(checkOut);
+      const nights = Math.ceil((co - ci) / (1000 * 60 * 60 * 24));
+      if (nights > 0) {
+        numNightsEl.textContent = nights;
+        totalPriceEl.textContent = 'PKR ' + (pricePerNight * nights).toLocaleString();
+      } else {
+        numNightsEl.textContent = '-';
+        totalPriceEl.textContent = '-';
+      }
+    }
+  }
+
+  checkInEl.addEventListener('change', updatePrice);
+  checkOutEl.addEventListener('change', updatePrice);
+  updatePrice();
+</script>
+{% endblock %}
