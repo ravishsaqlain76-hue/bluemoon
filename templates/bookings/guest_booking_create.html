@@ -16,6 +16,7 @@
 </div>
 <div class="page-body">
   <div class="container-xl">
+    {% if not user.is_authenticated %}
     <!-- Login Banner -->
     <div class="alert alert-info mb-4" role="alert">
       <div class="d-flex align-items-center">
@@ -27,6 +28,7 @@
         <div>Already have an account? <a href="{% url 'accounts:login' %}?next={% url 'bookings:booking_create' room.pk %}">Login here</a> to manage your bookings from your dashboard.</div>
       </div>
     </div>
+    {% endif %}
 
     <div class="row">
       <div class="col-lg-8">

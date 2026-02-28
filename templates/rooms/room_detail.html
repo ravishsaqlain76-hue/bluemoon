@@ -157,20 +157,14 @@
             </div>
             <hr>
             {% if seo_settings.booking_com_url %}
-              {# Temporary: redirect to Booking.com listing #}
               <a href="{{ seo_settings.booking_com_url }}" class="btn btn-primary w-100 btn-lg" target="_blank" rel="noopener">Book on Booking.com</a>
               <p class="text-muted text-center mt-2 mb-0">
                 <small>You'll be redirected to our Booking.com listing</small>
               </p>
-            {% elif user.is_authenticated %}
-              <a href="{% url 'bookings:booking_create' room.pk %}" class="btn btn-primary w-100 btn-lg">Book Now</a>
-              <p class="text-muted text-center mt-2 mb-0">
-                <small>Pay at check-in — no upfront payment required</small>
-              </p>
             {% else %}
               <a href="{% url 'bookings:guest_booking_create' room.pk %}" class="btn btn-primary w-100 btn-lg">Book Now</a>
               <p class="text-muted text-center mt-2 mb-0">
-                <small>Or <a href="{% url 'accounts:login' %}?next={% url 'bookings:booking_create' room.pk %}">login</a> if you have an account</small>
+                <small>Pay at check-in — no registration or upfront payment required</small>
               </p>
             {% endif %}
           </div>

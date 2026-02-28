@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}About Us | Blue Moon Residency - Guest House in Islamabad{% endif %}{% endblock %}
 {% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Learn about Blue Moon Residency, a premium guest house in F-6/2 Islamabad offering comfortable accommodation, modern amenities, and warm Pakistani hospitality.{% endif %}{% endblock %}
@@ -18,6 +19,31 @@
 {% block extra_css %}
 <style>
   .stars { color: #f59f00; }
+  .nearby-card img {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 6px 6px 0 0;
+  }
+  .nearby-card .card-body {
+    padding: 0.75rem;
+  }
+  .nearby-card .distance-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(15, 17, 23, 0.8);
+    color: #c5a04e;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .map-about iframe {
+    border-radius: 8px;
+    width: 100%;
+    height: 350px;
+    border: 0;
+  }
 </style>
 {% endblock %}
 
@@ -152,6 +178,87 @@
           </div>
         </div>
         {% endif %}
+
+        <!-- Nearby Attractions -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="card-title">Nearby Attractions</h3>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-4">Blue Moon Residency is ideally located in F-6/2 Islamabad — surrounded by the city's most iconic landmarks, all just minutes away.</p>
+            <div class="row g-3">
+              <div class="col-md-6 col-lg-4">
+                <div class="card nearby-card position-relative">
+                  <img src="{% static 'pictures/faisal-mosque.jpg' %}" alt="Faisal Mosque - 5 min from Blue Moon Residency F-6/2 Islamabad" loading="lazy">
+                  <span class="distance-badge">5 min drive</span>
+                  <div class="card-body text-center">
+                    <strong>Faisal Mosque</strong>
+                    <p class="text-muted mb-0" style="font-size: 0.8rem;">Pakistan's largest mosque and an iconic Islamabad landmark at the foot of Margalla Hills</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="card nearby-card position-relative">
+                  <img src="{% static 'pictures/4b.jpg' %}" alt="Pakistan Monument - 12 min from Blue Moon Residency Islamabad" loading="lazy">
+                  <span class="distance-badge">12 min drive</span>
+                  <div class="card-body text-center">
+                    <strong>Pakistan Monument</strong>
+                    <p class="text-muted mb-0" style="font-size: 0.8rem;">National monument representing Pakistan's four provinces with a museum inside</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 col-lg-4">
+                <div class="card nearby-card position-relative">
+                  <img src="{% static 'pictures/at-movenpick-islamabad.jpg' %}" alt="Centaurus Mall Movenpick - 8 min from Blue Moon Residency Islamabad" loading="lazy">
+                  <span class="distance-badge">8 min drive</span>
+                  <div class="card-body text-center">
+                    <strong>Centaurus Mall</strong>
+                    <p class="text-muted mb-0" style="font-size: 0.8rem;">Islamabad's premier shopping mall with international brands, food court, and Movenpick Hotel</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Location Map -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 class="card-title">Our Location — F-6/2 Islamabad</h3>
+          </div>
+          <div class="card-body">
+            <div class="row align-items-center mb-3">
+              <div class="col-md-6">
+                <div class="d-flex align-items-start">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon text-primary me-2 mt-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                    <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"/>
+                  </svg>
+                  <div>
+                    <strong>{{ seo_settings.street_address }}</strong><br>
+                    <span class="text-muted">F-6/2, {{ seo_settings.locality }}, Pakistan</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6 text-md-end mt-2 mt-md-0">
+                <a href="https://www.google.com/maps?q={{ seo_settings.latitude }},{{ seo_settings.longitude }}" target="_blank" rel="noopener" class="btn btn-primary">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon me-1" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
+                    <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"/>
+                  </svg>
+                  Get Directions
+                </a>
+              </div>
+            </div>
+            <div class="map-about">
+              <iframe
+                src="{{ seo_settings.google_maps_embed_url }}"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                title="Blue Moon Residency - F-6/2 Islamabad on Google Maps">
+              </iframe>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

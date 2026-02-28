@@ -27,6 +27,7 @@ class SeoSettings(models.Model):
     postal_code = models.CharField(max_length=20, default='44000')
     country = models.CharField(max_length=5, default='PK')
     phone = models.CharField(max_length=30, blank=True, default='+92-XXX-XXXXXXX')
+    phone2 = models.CharField(max_length=30, blank=True, default='', help_text='Second contact number (optional)')
     email = models.EmailField(blank=True, default='info@bluemoonresidency.com')
     latitude = models.DecimalField(max_digits=10, decimal_places=7, default=33.7294000)
     longitude = models.DecimalField(max_digits=10, decimal_places=7, default=73.0931000)

@@ -33,16 +33,16 @@
       <div class="col-sm-6 col-lg-3">
         <div class="card">
           <div class="card-body">
-            <div class="subheader">Total Revenue</div>
-            <div class="h1 mb-0">${{ total_revenue|intcomma }}</div>
+            <div class="subheader">Pending Review</div>
+            <div class="h1 mb-0 text-warning">{{ pending_bookings }}</div>
           </div>
         </div>
       </div>
       <div class="col-sm-6 col-lg-3">
         <div class="card">
           <div class="card-body">
-            <div class="subheader">New (30 days)</div>
-            <div class="h1 mb-0">{{ new_bookings_month }}</div>
+            <div class="subheader">Total Revenue</div>
+            <div class="h1 mb-0">PKR {{ total_revenue|intcomma }}</div>
           </div>
         </div>
       </div>
@@ -88,7 +88,7 @@
                   <td>{{ booking.room.name }}</td>
                   <td>{{ booking.check_in|date:"M d, Y" }}</td>
                   <td>{{ booking.check_out|date:"M d, Y" }}</td>
-                  <td>${{ booking.total_price|intcomma }}</td>
+                  <td>PKR {{ booking.total_price|intcomma }}</td>
                   <td>
                     <span class="badge
                       {% if booking.status == 'confirmed' %}bg-success
@@ -136,7 +136,7 @@
     },
     yaxis: {
       labels: {
-        formatter: function(val) { return '$' + val.toLocaleString(); }
+        formatter: function(val) { return 'PKR ' + val.toLocaleString(); }
       }
     },
     colors: ['#206bc4'],

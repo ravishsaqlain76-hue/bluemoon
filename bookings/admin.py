@@ -14,11 +14,12 @@ def cancel_bookings(modeladmin, request, queryset):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['booking_reference', 'get_guest_name', 'get_guest_email', 'room', 'check_in', 'check_out', 'total_price', 'status', 'get_booking_type', 'created_at']
-    list_filter = ['status', 'payment_method', 'created_at']
+    list_display = ['booking_reference', 'get_guest_name', 'get_guest_email', 'get_guest_phone', 'room', 'check_in', 'check_out', 'total_price', 'status', 'get_booking_type', 'created_at']
+    list_filter = ['status', 'payment_method', 'room', 'created_at']
     search_fields = ['booking_reference', 'user__username', 'room__name', 'guest_name', 'guest_email', 'guest_phone']
     readonly_fields = ['booking_reference', 'created_at', 'updated_at']
     actions = [approve_bookings, cancel_bookings]
+    date_hierarchy = 'created_at'
     fieldsets = (
         ('Booking Info', {
             'fields': ('booking_reference', 'room', 'status', 'payment_method'),
@@ -41,6 +42,12 @@ class BookingAdmin(admin.ModelAdmin):
     @admin.display(description='Email')
     def get_guest_email(self, obj):
         return obj.guest_contact_email
+
+    @admin.display(description='Phone')
+    def get_guest_phone(self, obj):
+        if obj.user and hasattr(obj.user, 'profile'):
+            return obj.user.profile.phone or obj.guest_phone
+        return obj.guest_phone
 
     @admin.display(description='Type', boolean=True)
     def get_booking_type(self, obj):

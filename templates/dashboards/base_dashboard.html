@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-header d-print-none">
+  <div class="container-xl">
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <div class="page-pretitle">{% block pretitle %}Dashboard{% endblock %}</div>
+        <h2 class="page-title">{% block page_title %}{% endblock %}</h2>
+      </div>
+      <div class="col-auto ms-auto">
+        {% block header_actions %}{% endblock %}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="page-body">
+  <div class="container-xl">
+    {% block dashboard_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

@@ -1,29 +1,41 @@
 Dear {{ booking.guest_name }},
 
-Your booking at Blue Moon Residency has been confirmed!
+Thank you for booking with Blue Moon Residency!
+
+Your booking request has been received and is being reviewed by our team.
+We will confirm your reservation shortly.
 
 BOOKING DETAILS
 ===============
 Booking Reference: {{ booking.booking_reference }}
+Status: {{ booking.get_status_display }}
 Room: {{ booking.room.name }} ({{ booking.room.get_room_type_display }})
 Check-in: {{ booking.check_in|date:"l, M d, Y" }}
 Check-out: {{ booking.check_out|date:"l, M d, Y" }}
 Nights: {{ booking.num_nights }}
 Guests: {{ booking.guests }}
-Total: PKR {{ booking.total_price }}
+Total: PKR {{ booking.total_price|floatformat:"0" }}
 {% if booking.special_requests %}
 Special Requests: {{ booking.special_requests }}
 {% endif %}
 PAYMENT
 =======
 Pay at Check-in — No upfront payment is required.
-Please pay PKR {{ booking.total_price }} at the front desk during check-in.
+Please pay PKR {{ booking.total_price|floatformat:"0" }} at the front desk during check-in.
+
+CHECK YOUR BOOKING
+==================
+You can check your booking status at any time:
+{{ site_url }}/bookings/lookup/?ref={{ booking.booking_reference }}
 
 LOCATION
 ========
 Blue Moon Residency
-F-6/2, Islamabad
+{{ address }}
+F-6/2, Islamabad, Pakistan
 
-If you have any questions, please don't hesitate to contact us.
+If you have any questions, please contact us:
+Phone: {{ phone }}
+Email: {{ email }}
 
 Thank you for choosing Blue Moon Residency!

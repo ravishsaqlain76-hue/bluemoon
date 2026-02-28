@@ -62,3 +62,16 @@ class Booking(models.Model):
     @property
     def is_guest_booking(self):
         return self.user is None
+
+    @classmethod
+    def has_overlap(cls, room, check_in, check_out, exclude_pk=None):
+        """Check if any active booking overlaps the given date range for this room."""
+        qs = cls.objects.filter(
+            room=room,
+            status__in=['pending', 'confirmed'],
+            check_in__lt=check_out,
+            check_out__gt=check_in,
+        )
+        if exclude_pk:
+            qs = qs.exclude(pk=exclude_pk)
+        return qs.exists()

@@ -19,6 +19,10 @@ class BookingForm(forms.ModelForm):
             'special_requests': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
 
+    def __init__(self, *args, **kwargs):
+        self.room = kwargs.pop('room', None)
+        super().__init__(*args, **kwargs)
+
     def clean(self):
         cleaned_data = super().clean()
         check_in = cleaned_data.get('check_in')
@@ -30,6 +34,14 @@ class BookingForm(forms.ModelForm):
                 self.add_error('check_in', 'Check-in date cannot be in the past.')
             if check_out <= check_in:
                 self.add_error('check_out', 'Check-out date must be after check-in date.')
+
+            if self.room and not self.errors:
+                if Booking.has_overlap(self.room, check_in, check_out):
+                    self.add_error(None, 'Sorry, this room is not available for the selected dates. Please choose different dates.')
+
+            guests = cleaned_data.get('guests')
+            if self.room and guests and guests > self.room.capacity:
+                self.add_error('guests', f'This room holds a maximum of {self.room.capacity} guests.')
 
         return cleaned_data
 
@@ -64,6 +76,10 @@ class GuestBookingForm(forms.ModelForm):
             'special_requests': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }
 
+    def __init__(self, *args, **kwargs):
+        self.room = kwargs.pop('room', None)
+        super().__init__(*args, **kwargs)
+
     def clean(self):
         cleaned_data = super().clean()
         check_in = cleaned_data.get('check_in')
@@ -75,5 +91,13 @@ class GuestBookingForm(forms.ModelForm):
                 self.add_error('check_in', 'Check-in date cannot be in the past.')
             if check_out <= check_in:
                 self.add_error('check_out', 'Check-out date must be after check-in date.')
+
+            if self.room and not self.errors:
+                if Booking.has_overlap(self.room, check_in, check_out):
+                    self.add_error(None, 'Sorry, this room is not available for the selected dates. Please choose different dates.')
+
+            guests = cleaned_data.get('guests')
+            if self.room and guests and guests > self.room.capacity:
+                self.add_error('guests', f'This room holds a maximum of {self.room.capacity} guests.')
 
         return cleaned_data

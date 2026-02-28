@@ -200,6 +200,9 @@
                     {% if seo_settings.phone %}
                     <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i><a href="tel:{{ seo_settings.phone }}" class="text-light text-decoration-none">{{ seo_settings.phone }}</a></small>
                     {% endif %}
+                    {% if seo_settings.phone2 %}
+                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i><a href="tel:{{ seo_settings.phone2 }}" class="text-light text-decoration-none">{{ seo_settings.phone2 }}</a></small>
+                    {% endif %}
                     {% if seo_settings.email %}
                     <small class="text-light"><i class="fa fa-envelope-open me-2"></i><a href="mailto:{{ seo_settings.email }}" class="text-light text-decoration-none">{{ seo_settings.email }}</a></small>
                     {% endif %}
@@ -223,7 +226,7 @@
     <div class="container-fluid position-relative p-0">
         <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
             <a href="{% url 'home' %}" class="navbar-brand p-0">
-                <h1 class="m-0" style="color: #c5a04e;"><i class="fa fa-moon me-3"></i>Blue Moon</h1>
+                <h1 class="m-0" style="color: #c5a04e;"><img src="{% static 'pak.png' %}" alt="Blue Moon Residency" height="40" class="me-2" style="border-radius: 4px;">Blue Moon</h1>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
@@ -245,7 +248,12 @@
         </nav>
 
         <div class="container-fluid bg-primary py-5 mb-5 hero-header" style="min-height: 600px;">
-            <div class="container py-5">
+            <div class="hero-slideshow">
+                <div class="hero-slide"></div>
+                <div class="hero-slide"></div>
+                <div class="hero-slide"></div>
+            </div>
+            <div class="container py-5 hero-content">
                 <div class="row justify-content-center py-5">
                     <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
                         <h1 class="display-3 text-white mb-3 animated slideInDown">Blue Moon Residency</h1>
@@ -494,6 +502,50 @@
     <!-- Room Packages End -->
 
 
+    <!-- Nearby Attractions Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Explore Islamabad</h6>
+                <h2 class="mb-5">Top Attractions Near Our Guest House</h2>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="position-relative overflow-hidden" style="border-radius: 10px;">
+                        <img class="img-fluid w-100" src="{% static 'pictures/faisal-mosque.jpg' %}" alt="Faisal Mosque - 5 min from Blue Moon Residency F-6/2 Islamabad" loading="lazy" style="height: 280px; object-fit: cover;">
+                        <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(transparent, rgba(15,17,23,0.85));">
+                            <h5 class="text-white mb-0">Faisal Mosque</h5>
+                            <small class="text-white-50">5 min drive &middot; Pakistan's largest mosque</small>
+                        </div>
+                        <span class="position-absolute top-0 end-0 m-2 px-3 py-1" style="background: rgba(15,17,23,0.7); color: #c5a04e; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">5 min</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="position-relative overflow-hidden" style="border-radius: 10px;">
+                        <img class="img-fluid w-100" src="{% static 'pictures/4b.jpg' %}" alt="Pakistan Monument - 12 min from Blue Moon Residency Islamabad" loading="lazy" style="height: 280px; object-fit: cover;">
+                        <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(transparent, rgba(15,17,23,0.85));">
+                            <h5 class="text-white mb-0">Pakistan Monument</h5>
+                            <small class="text-white-50">12 min drive &middot; Iconic national landmark</small>
+                        </div>
+                        <span class="position-absolute top-0 end-0 m-2 px-3 py-1" style="background: rgba(15,17,23,0.7); color: #c5a04e; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">12 min</span>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+                    <div class="position-relative overflow-hidden" style="border-radius: 10px;">
+                        <img class="img-fluid w-100" src="{% static 'pictures/at-movenpick-islamabad.jpg' %}" alt="Centaurus Mall Movenpick Hotel - 8 min from Blue Moon Residency Islamabad" loading="lazy" style="height: 280px; object-fit: cover;">
+                        <div class="position-absolute bottom-0 start-0 w-100 p-3" style="background: linear-gradient(transparent, rgba(15,17,23,0.85));">
+                            <h5 class="text-white mb-0">Centaurus Mall</h5>
+                            <small class="text-white-50">8 min drive &middot; Shopping, dining & Movenpick Hotel</small>
+                        </div>
+                        <span class="position-absolute top-0 end-0 m-2 px-3 py-1" style="background: rgba(15,17,23,0.7); color: #c5a04e; border-radius: 20px; font-size: 0.8rem; font-weight: 600;">8 min</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Nearby Attractions End -->
+
+
     <!-- Booking CTA Start -->
     <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
         <div class="container">
@@ -738,6 +790,9 @@
                     <p class="mb-2"><i class="fa fa-map-marker-alt me-3"></i>{{ seo_settings.street_address }}, F-6/2, {{ seo_settings.locality }}</p>
                     {% if seo_settings.phone %}
                     <p class="mb-2"><i class="fa fa-phone-alt me-3"></i><a href="tel:{{ seo_settings.phone }}" class="text-light text-decoration-none">{{ seo_settings.phone }}</a></p>
+                    {% endif %}
+                    {% if seo_settings.phone2 %}
+                    <p class="mb-2"><i class="fa fa-phone-alt me-3"></i><a href="tel:{{ seo_settings.phone2 }}" class="text-light text-decoration-none">{{ seo_settings.phone2 }}</a></p>
                     {% endif %}
                     {% if seo_settings.email %}
                     <p class="mb-2"><i class="fa fa-envelope me-3"></i><a href="mailto:{{ seo_settings.email }}" class="text-light text-decoration-none">{{ seo_settings.email }}</a></p>

@@ -46,6 +46,17 @@ def logout_view(request):
 
 @login_required
 def dashboard_view(request):
+    """Route staff to their role-specific dashboard, guests see the regular dashboard."""
+    if hasattr(request.user, 'profile'):
+        role = request.user.profile.role
+        if role == 'ceo' or request.user.is_superuser:
+            return redirect('bookings:ceo_dashboard')
+        elif role == 'receptionist':
+            return redirect('bookings:receptionist_dashboard')
+        elif role == 'marketing':
+            return redirect('marketing_dashboard')
+
+    # Guest dashboard
     bookings = request.user.bookings.all().order_by('-created_at')[:10]
     return render(request, 'accounts/dashboard.html', {'bookings': bookings})
 

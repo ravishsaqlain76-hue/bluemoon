@@ -14,6 +14,102 @@ html {
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
 }
 
+/* ---------- Global gold theme for btn-primary ---------- */
+.btn-primary {
+  background-color: #c5a04e !important;
+  border-color: #c5a04e !important;
+  color: #0f1117 !important;
+  font-weight: 600;
+}
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #d4b35e !important;
+  border-color: #d4b35e !important;
+  color: #0f1117 !important;
+}
+.btn-primary:active,
+.btn-primary.active {
+  background-color: #b8923f !important;
+  border-color: #b8923f !important;
+  color: #0f1117 !important;
+}
+
+/* btn-outline-primary gold */
+.btn-outline-primary {
+  color: #c5a04e !important;
+  border-color: #c5a04e !important;
+  background: transparent !important;
+}
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: #c5a04e !important;
+  border-color: #c5a04e !important;
+  color: #0f1117 !important;
+}
+
+/* Ghost primary (Tabler) gold */
+.btn-ghost-primary {
+  color: #c5a04e !important;
+}
+.btn-ghost-primary:hover {
+  background-color: rgba(197, 160, 78, 0.1) !important;
+  color: #c5a04e !important;
+}
+
+/* Links & accent color */
+a.text-primary,
+.text-primary {
+  color: #c5a04e !important;
+}
+
+/* ---------- Override Tabler blue badges/avatars to gold ---------- */
+.bg-blue-lt,
+.badge.bg-blue-lt {
+  background-color: rgba(197, 160, 78, 0.15) !important;
+  color: #a07c28 !important;
+}
+.bg-blue,
+.avatar.bg-blue-lt {
+  background-color: rgba(197, 160, 78, 0.2) !important;
+  color: #c5a04e !important;
+}
+
+/* Override Tabler form focus ring to gold */
+.form-control:focus,
+.form-select:focus {
+  border-color: #c5a04e !important;
+  box-shadow: 0 0 0 0.25rem rgba(197, 160, 78, 0.25) !important;
+}
+
+/* Pagination active page gold */
+.page-item.active .page-link {
+  background-color: #c5a04e !important;
+  border-color: #c5a04e !important;
+  color: #0f1117 !important;
+}
+.page-link {
+  color: #c5a04e !important;
+}
+.page-link:hover {
+  color: #a07c28 !important;
+  background-color: rgba(197, 160, 78, 0.1) !important;
+}
+
+/* Breadcrumb link gold */
+.breadcrumb-item a {
+  color: #c5a04e !important;
+}
+.breadcrumb-item a:hover {
+  color: #d4b35e !important;
+}
+
+/* Dropdown active item gold */
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: #c5a04e !important;
+  color: #0f1117 !important;
+}
+
 /* ---------- Button hover transitions ---------- */
 .btn {
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, color 0.2s ease;
