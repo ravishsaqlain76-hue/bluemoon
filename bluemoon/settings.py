@@ -21,8 +21,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # =============================================================================
 # ENVIRONMENT DETECTION
 # =============================================================================
-# Render sets RENDER=true automatically. This tells us if we're on Render or local.
-IS_RENDER = os.environ.get('RENDER', '') == 'true'
+# Detect if we're running on a cloud platform (Render or Railway) or locally
+IS_PRODUCTION = os.environ.get('RENDER', '') == 'true' or os.environ.get('RAILWAY_ENVIRONMENT', '') != ''
 
 
 # =============================================================================
@@ -34,15 +34,21 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-akty4*gqwl!v6b4cys7-k
 
 # On Render: DEBUG off (production)
 # On local: DEBUG on (development)
-DEBUG = not IS_RENDER
+DEBUG = not IS_PRODUCTION
 
-# On Render: only allow your Render URL
-# On local: allow everything
+# Production: allow platform URLs
+# Local: allow everything
 ALLOWED_HOSTS = []
-if IS_RENDER:
+if IS_PRODUCTION:
     RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+    RAILWAY_PUBLIC_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
     if RENDER_EXTERNAL_HOSTNAME:
         ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+    if RAILWAY_PUBLIC_DOMAIN:
+        ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+    # Fallback: allow all if no specific host detected
+    if not ALLOWED_HOSTS:
+        ALLOWED_HOSTS = ['*']
 else:
     ALLOWED_HOSTS = ['*']
 
@@ -112,7 +118,7 @@ WSGI_APPLICATION = 'bluemoon.wsgi.application'
 # =============================================================================
 # On Render: reads DATABASE_URL environment variable (PostgreSQL)
 # On local: uses SQLite (no change for you)
-if IS_RENDER:
+if IS_PRODUCTION:
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
@@ -202,7 +208,7 @@ CACHES = {
 # =============================================================================
 # SECURITY SETTINGS (only on Render/production)
 # =============================================================================
-if IS_RENDER:
+if IS_PRODUCTION:
     SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
@@ -212,7 +218,11 @@ if IS_RENDER:
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
-    CSRF_TRUSTED_ORIGINS = [f'https://{os.environ.get("RENDER_EXTERNAL_HOSTNAME", "")}']
+    CSRF_TRUSTED_ORIGINS = []
+    if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
+        CSRF_TRUSTED_ORIGINS.append(f'https://{os.environ["RENDER_EXTERNAL_HOSTNAME"]}')
+    if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
+        CSRF_TRUSTED_ORIGINS.append(f'https://{os.environ["RAILWAY_PUBLIC_DOMAIN"]}')
 
 
 # =============================================================================
@@ -235,8 +245,12 @@ SIMPLE_JWT = {
 }
 
 # CORS
-if IS_RENDER:
+if IS_PRODUCTION:
     CORS_ALLOW_ALL_ORIGINS = False
-    CORS_ALLOWED_ORIGINS = [f'https://{os.environ.get("RENDER_EXTERNAL_HOSTNAME", "")}']
+    CORS_ALLOWED_ORIGINS = []
+    if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
+        CORS_ALLOWED_ORIGINS.append(f'https://{os.environ["RENDER_EXTERNAL_HOSTNAME"]}')
+    if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
+        CORS_ALLOWED_ORIGINS.append(f'https://{os.environ["RAILWAY_PUBLIC_DOMAIN"]}')
 else:
     CORS_ALLOW_ALL_ORIGINS = True
