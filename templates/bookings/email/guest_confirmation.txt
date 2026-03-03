@@ -1,6 +1,6 @@
 Dear {{ booking.guest_name }},
 
-Thank you for booking with Blue Moon Residency!
+Thank you for booking with {{ gh_name }}!
 
 Your booking request has been received and is being reviewed by our team.
 We will confirm your reservation shortly.
@@ -30,12 +30,12 @@ You can check your booking status at any time:
 
 LOCATION
 ========
-Blue Moon Residency
+{{ gh_name }}
 {{ address }}
-F-6/2, Islamabad, Pakistan
+Islamabad, Pakistan
 
 If you have any questions, please contact us:
 Phone: {{ phone }}
 Email: {{ email }}
 
-Thank you for choosing Blue Moon Residency!
+Thank you for choosing {{ gh_name }}!

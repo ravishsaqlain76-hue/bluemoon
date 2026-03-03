@@ -1,0 +1,97 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Blue Moon Guest Houses — Select Property</title>
+    <link href="{% static 'tabler/dashboard/dist/css/tabler.min.css' %}" rel="stylesheet" />
+    <style>
+      @import url("https://rsms.me/inter/inter.css");
+      body { background: #0f1117; min-height: 100vh; }
+      .gold { color: #c5a04e; }
+      .property-card {
+        transition: transform 0.25s, box-shadow 0.25s;
+        cursor: pointer;
+        border: 1px solid rgba(197,160,78,0.15);
+        border-radius: 12px;
+        height: 100%;
+      }
+      .property-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 30px rgba(197,160,78,0.25);
+        border-color: rgba(197,160,78,0.4);
+      }
+      .btn-gold {
+        background: #c5a04e; border-color: #c5a04e; color: #0f1117; font-weight: 600;
+        border-radius: 8px; padding: 10px 20px;
+      }
+      .btn-gold:hover { background: #d4b35e; border-color: #d4b35e; color: #0f1117; }
+      .prop-avatar {
+        width: 64px; height: 64px; border-radius: 50%;
+        background: rgba(197,160,78,0.15); color: #c5a04e;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 1.3rem; font-weight: 700;
+      }
+      .prop-address { font-size: 0.875rem; line-height: 1.5; }
+      .prop-phone { font-size: 0.875rem; }
+      .prop-phone a { color: #c5a04e; text-decoration: none; }
+      .prop-phone a:hover { text-decoration: underline; }
+      .footer-links a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.875rem; }
+      .footer-links a:hover { color: #c5a04e; }
+    </style>
+  </head>
+  <body>
+    <div class="container py-5">
+      <!-- Header -->
+      <div class="text-center mb-5 pt-4">
+        <img src="{% static 'pak-main.png' %}" alt="Blue Moon" height="100" class="mb-3" style="border-radius: 8px;">
+        <h1 class="gold mb-1" style="font-size: 2.2rem; font-weight: 700;">Blue Moon Guest Houses</h1>
+        <p class="text-white-50" style="font-size: 1.05rem;">Select a property to continue</p>
+      </div>
+
+      <!-- Property Cards -->
+      <div class="row g-4 justify-content-center">
+        {% for prop in properties %}
+        <div class="col-sm-6 col-lg-4">
+          <div class="card property-card">
+            <div class="card-body text-center p-4 d-flex flex-column">
+              {% if prop.logo %}
+                <img src="{{ prop.logo.url }}" alt="{{ prop.name }}" height="50" class="mb-3 mx-auto">
+              {% else %}
+                <div class="mb-3">
+                  <span class="prop-avatar">{{ prop.short_name|default:prop.name|truncatechars:2 }}</span>
+                </div>
+              {% endif %}
+              <h3 class="mb-2" style="font-size: 1.2rem;">{{ prop.name }}</h3>
+              <p class="text-muted prop-address mb-2">
+                {{ prop.street_address }}<br>
+                {{ prop.locality }}, Pakistan
+              </p>
+              {% if prop.phone %}
+              <p class="prop-phone mb-3">
+                <a href="tel:{{ prop.phone }}">{{ prop.phone }}</a>
+              </p>
+              {% endif %}
+              <div class="mt-auto">
+                <a href="{{ prop.get_absolute_url }}" class="btn btn-gold w-100">
+                  Visit {{ prop.short_name|default:prop.name }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Footer Links -->
+      <div class="text-center mt-5 footer-links d-flex justify-content-center gap-3 flex-wrap">
+        {% if user.is_authenticated %}
+          <a href="{% url 'accounts:dashboard' %}">My Dashboard</a>
+          <span class="text-white-50">|</span>
+        {% endif %}
+        <a href="{% url 'bookings:booking_lookup' %}">Check Booking Status</a>
+      </div>
+    </div>
+  </body>
+</html>

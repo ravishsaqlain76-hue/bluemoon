@@ -1,6 +1,6 @@
 {% extends 'base_auth.html' %}
 
-{% block title %}Login | Blue Moon{% endblock %}
+{% block title %}Login | {% if guest_house %}{{ guest_house.short_name|default:guest_house.name }}{% else %}Blue Moon{% endif %}{% endblock %}
 
 {% block content %}
 <div class="card card-md">

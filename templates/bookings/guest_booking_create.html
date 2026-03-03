@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}Book {{ room.name }} | Blue Moon{% endblock %}
+{% block title %}Book {{ room.name }} | {% if guest_house %}{{ guest_house.short_name|default:guest_house.name }}{% else %}Blue Moon{% endif %}{% endblock %}
 {% block nav_rooms %}active{% endblock %}
 
 {% block content %}
 <div class="page-header d-print-none">
   <div class="container-xl">
     <div class="page-pretitle">
-      <a href="{% url 'rooms:room_list' %}" class="text-muted">Rooms</a> /
-      <a href="{% url 'rooms:room_detail' room.slug %}" class="text-muted">{{ room.name }}</a> /
+      <a href="{% url 'rooms:room_list' property_slug=guest_house.slug %}" class="text-muted">Rooms</a> /
+      <a href="{% url 'rooms:room_detail' property_slug=guest_house.slug slug=room.slug %}" class="text-muted">{{ room.name }}</a> /
     </div>
     <h2 class="page-title">Book This Room</h2>
   </div>
@@ -25,7 +25,7 @@
           <path d="M12 8v4"/>
           <path d="M12 16h.01"/>
         </svg>
-        <div>Already have an account? <a href="{% url 'accounts:login' %}?next={% url 'bookings:booking_create' room.pk %}">Login here</a> to manage your bookings from your dashboard.</div>
+        <div>Already have an account? <a href="{% url 'accounts:login' %}?next={% url 'property_booking_create' property_slug=room.guest_house.slug room_id=room.pk %}">Login here</a> to manage your bookings from your dashboard.</div>
       </div>
     </div>
     {% endif %}
@@ -106,7 +106,7 @@
                 </div>
               {% endif %}
               <div class="d-flex justify-content-between">
-                <a href="{% url 'rooms:room_detail' room.slug %}" class="btn btn-ghost-secondary">Back to Room</a>
+                <a href="{% url 'rooms:room_detail' property_slug=guest_house.slug slug=room.slug %}" class="btn btn-ghost-secondary">Back to Room</a>
                 <button type="submit" class="btn btn-primary">Confirm Booking</button>
               </div>
             </form>

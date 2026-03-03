@@ -7,10 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <!-- SEO Meta Tags -->
-    <title>{% block title %}{{ seo_settings.default_meta_title }}{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}{{ seo_settings.default_meta_description }}{% endblock %}" />
-    <meta name="keywords" content="{% block meta_keywords %}{{ seo_settings.default_keywords }}{% endblock %}" />
-    <meta name="author" content="{{ seo_settings.business_name }}" />
+    <title>{% block title %}{% if guest_house %}{{ guest_house.default_meta_title }}{% else %}{{ seo_settings.default_meta_title }}{% endif %}{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}{% if guest_house %}{{ guest_house.default_meta_description }}{% else %}{{ seo_settings.default_meta_description }}{% endif %}{% endblock %}" />
+    <meta name="keywords" content="{% block meta_keywords %}{% if guest_house %}{{ guest_house.default_keywords }}{% else %}{{ seo_settings.default_keywords }}{% endif %}{% endblock %}" />
+    <meta name="author" content="{% if guest_house %}{{ guest_house.business_name }}{% else %}{{ seo_settings.business_name }}{% endif %}" />
     <meta name="robots" content="index, follow" />
 
     <!-- Canonical URL -->
@@ -18,10 +18,10 @@
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
-    <meta property="og:title" content="{% block og_title %}{{ seo_settings.default_meta_title }}{% endblock %}" />
-    <meta property="og:description" content="{% block og_description %}{{ seo_settings.default_meta_description }}{% endblock %}" />
+    <meta property="og:title" content="{% block og_title %}{% if guest_house %}{{ guest_house.default_meta_title }}{% else %}{{ seo_settings.default_meta_title }}{% endif %}{% endblock %}" />
+    <meta property="og:description" content="{% block og_description %}{% if guest_house %}{{ guest_house.default_meta_description }}{% else %}{{ seo_settings.default_meta_description }}{% endif %}{% endblock %}" />
     <meta property="og:url" content="{{ SITE_URL }}{{ request.path }}" />
-    <meta property="og:site_name" content="{{ seo_settings.site_name }}" />
+    <meta property="og:site_name" content="{% if guest_house %}{{ guest_house.name }}{% else %}{{ seo_settings.site_name }}{% endif %}" />
     <meta property="og:locale" content="en_US" />
     {% if seo_settings.og_image %}
       <meta property="og:image" content="{{ SITE_URL }}{{ seo_settings.og_image.url }}" />
@@ -33,8 +33,8 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="{% block twitter_title %}{{ seo_settings.default_meta_title }}{% endblock %}" />
-    <meta name="twitter:description" content="{% block twitter_description %}{{ seo_settings.default_meta_description }}{% endblock %}" />
+    <meta name="twitter:title" content="{% block twitter_title %}{% if guest_house %}{{ guest_house.default_meta_title }}{% else %}{{ seo_settings.default_meta_title }}{% endif %}{% endblock %}" />
+    <meta name="twitter:description" content="{% block twitter_description %}{% if guest_house %}{{ guest_house.default_meta_description }}{% else %}{{ seo_settings.default_meta_description }}{% endif %}{% endblock %}" />
     {% if seo_settings.og_image %}
       <meta name="twitter:image" content="{{ SITE_URL }}{{ seo_settings.og_image.url }}" />
     {% else %}
@@ -44,14 +44,42 @@
     <!-- Geo Tags for Local SEO -->
     <meta name="geo.region" content="PK-IS" />
     <meta name="geo.placename" content="Islamabad" />
+    {% if guest_house %}
+    <meta name="geo.position" content="{{ guest_house.latitude }};{{ guest_house.longitude }}" />
+    <meta name="ICBM" content="{{ guest_house.latitude }}, {{ guest_house.longitude }}" />
+    {% else %}
     <meta name="geo.position" content="{{ seo_settings.latitude }};{{ seo_settings.longitude }}" />
     <meta name="ICBM" content="{{ seo_settings.latitude }}, {{ seo_settings.longitude }}" />
+    {% endif %}
 
     <!-- JSON-LD: Hotel (primary schema for guest house) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "Hotel",
+      {% if guest_house %}
+      "name": "{{ guest_house.business_name }}",
+      "description": "{{ guest_house.default_meta_description }}",
+      "url": "{{ SITE_URL }}{{ nav_home_url }}",
+      "telephone": "{{ guest_house.phone }}",
+      "email": "{{ guest_house.email }}",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ guest_house.street_address }}",
+        "addressLocality": "{{ guest_house.locality }}",
+        "addressRegion": "{{ guest_house.region }}",
+        "postalCode": "{{ guest_house.postal_code }}",
+        "addressCountry": "{{ guest_house.country }}"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": {{ guest_house.latitude }},
+        "longitude": {{ guest_house.longitude }}
+      },
+      "priceRange": "{{ guest_house.price_range }}",
+      "checkinTime": "{{ guest_house.check_in_time }}",
+      "checkoutTime": "{{ guest_house.check_out_time }}",
+      {% else %}
       "name": "{{ seo_settings.business_name }}",
       "description": "{{ seo_settings.default_meta_description }}",
       "url": "{{ SITE_URL }}",
@@ -60,7 +88,7 @@
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "{{ seo_settings.street_address }}",
-        "addressLocality": "F-6/2, {{ seo_settings.locality }}",
+        "addressLocality": "{{ seo_settings.locality }}",
         "addressRegion": "{{ seo_settings.region }}",
         "postalCode": "{{ seo_settings.postal_code }}",
         "addressCountry": "{{ seo_settings.country }}"
@@ -73,6 +101,7 @@
       "priceRange": "{{ seo_settings.price_range }}",
       "checkinTime": "{{ seo_settings.check_in_time }}",
       "checkoutTime": "{{ seo_settings.check_out_time }}",
+      {% endif %}
       "currenciesAccepted": "PKR",
       "paymentAccepted": "Cash",
       "openingHoursSpecification": {
@@ -98,11 +127,11 @@
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "name": "{{ seo_settings.business_name }}",
+      "name": "{% if guest_house %}{{ guest_house.business_name }}{% else %}{{ seo_settings.business_name }}{% endif %}",
       "url": "{{ SITE_URL }}",
       "potentialAction": {
         "@type": "SearchAction",
-        "target": "{{ SITE_URL }}/rooms/?type={search_term_string}",
+        "target": "{{ SITE_URL }}{{ nav_rooms_url }}?type={search_term_string}",
         "query-input": "required name=search_term_string"
       }
     }
@@ -174,32 +203,38 @@
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="navbar-brand d-none-navbar-horizontal pe-0 pe-md-3">
-            <a href="{% url 'home' %}" class="d-flex align-items-center">
-              <img src="{% static 'pak.png' %}" alt="Blue Moon Residency - Guest House in F-6/2 Islamabad" height="18">
+            <a href="{{ nav_home_url }}" class="d-flex align-items-center">
+              {% if guest_house and guest_house.logo %}
+                <img src="{{ guest_house.logo.url }}" alt="{{ guest_house.name }}" height="18">
+              {% elif guest_house.slug == 'blue-moon-residency' %}
+                <img src="{% static 'pak.png' %}" alt="{{ guest_house.name }}" height="18">
+              {% else %}
+                <img src="{% static 'pak-main.png' %}" alt="{% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %}" height="18">
+              {% endif %}
             </a>
           </div>
           <div class="collapse navbar-collapse" id="navbar-menu">
             <ul class="navbar-nav">
               <li class="nav-item {% block nav_home %}{% endblock %}">
-                <a class="nav-link" href="{% url 'home' %}">
+                <a class="nav-link" href="{{ nav_home_url }}">
                   <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><polyline points="5 12 3 12 12 3 21 12 19 12"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"/><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6"/></svg></span>
                   <span class="nav-link-title">Home</span>
                 </a>
               </li>
               <li class="nav-item {% block nav_rooms %}{% endblock %}">
-                <a class="nav-link" href="{% url 'rooms:room_list' %}">
+                <a class="nav-link" href="{{ nav_rooms_url }}">
                   <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7v11m0 -4h18m0 4v-8a2 2 0 0 0 -2 -2h-8v6"/><circle cx="7" cy="10" r="1"/></svg></span>
                   <span class="nav-link-title">Rooms</span>
                 </a>
               </li>
               <li class="nav-item {% block nav_about %}{% endblock %}">
-                <a class="nav-link" href="{% url 'about' %}">
+                <a class="nav-link" href="{{ nav_about_url }}">
                   <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12.01" y2="8"/><polyline points="11 12 12 12 12 16 13 16"/></svg></span>
                   <span class="nav-link-title">About</span>
                 </a>
               </li>
               <li class="nav-item {% block nav_contact %}{% endblock %}">
-                <a class="nav-link" href="{% url 'contact' %}">
+                <a class="nav-link" href="{{ nav_contact_url }}">
                   <span class="nav-link-icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3 7 12 13 21 7"/></svg></span>
                   <span class="nav-link-title">Contact</span>
                 </a>
@@ -268,23 +303,39 @@
             <!-- NAP Block (Name, Address, Phone) — consistent across every page for Local SEO -->
             <div class="row mb-3 pt-3">
               <div class="col-lg-4 mb-3 mb-lg-0">
-                <a href="{% url 'home' %}"><img src="{% static 'pak.png' %}" alt="Blue Moon Residency - Best Guest House in F-6/2 Islamabad" height="36" class="mb-2" style="border-radius: 4px;"></a>
-                <h3 class="h5 mb-1" style="color: #c5a04e;">Blue Moon Residency</h3>
+                <a href="{{ nav_home_url }}">
+                  {% if guest_house and guest_house.logo %}
+                    <img src="{{ guest_house.logo.url }}" alt="{{ guest_house.name }}" height="36" class="mb-2" style="border-radius: 4px;">
+                  {% elif guest_house.slug == 'blue-moon-residency' %}
+                    <img src="{% static 'pak.png' %}" alt="{{ guest_house.name }}" height="36" class="mb-2" style="border-radius: 4px;">
+                  {% else %}
+                    <img src="{% static 'pak-main.png' %}" alt="{% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %}" height="36" class="mb-2" style="border-radius: 4px;">
+                  {% endif %}
+                </a>
+                <h3 class="h5 mb-1" style="color: #c5a04e;">{% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %}</h3>
+                {% if guest_house %}
+                <address class="mb-0" style="font-style: normal; font-size: 0.85rem; color: rgba(255,255,255,0.6);">
+                  {{ guest_house.street_address }}<br>
+                  {{ guest_house.locality }}, Pakistan {{ guest_house.postal_code }}<br>
+                  {% if guest_house.phone %}<a href="tel:{{ guest_house.phone }}" style="color: #c5a04e;">{{ guest_house.phone }}</a><br>{% endif %}
+                  {% if guest_house.phone2 %}<a href="tel:{{ guest_house.phone2 }}" style="color: #c5a04e;">{{ guest_house.phone2 }}</a><br>{% endif %}
+                  {% if guest_house.email %}<a href="mailto:{{ guest_house.email }}" style="color: #c5a04e;">{{ guest_house.email }}</a>{% endif %}
+                </address>
+                {% else %}
                 <address class="mb-0" style="font-style: normal; font-size: 0.85rem; color: rgba(255,255,255,0.6);">
                   {{ seo_settings.street_address }}<br>
-                  F-6/2, {{ seo_settings.locality }}, Pakistan {{ seo_settings.postal_code }}<br>
+                  {{ seo_settings.locality }}, Pakistan {{ seo_settings.postal_code }}<br>
                   {% if seo_settings.phone %}<a href="tel:{{ seo_settings.phone }}" style="color: #c5a04e;">{{ seo_settings.phone }}</a><br>{% endif %}
-                  {% if seo_settings.phone2 %}<a href="tel:{{ seo_settings.phone2 }}" style="color: #c5a04e;">{{ seo_settings.phone2 }}</a><br>{% endif %}
                   {% if seo_settings.email %}<a href="mailto:{{ seo_settings.email }}" style="color: #c5a04e;">{{ seo_settings.email }}</a>{% endif %}
                 </address>
+                {% endif %}
               </div>
               <div class="col-lg-4 mb-3 mb-lg-0">
                 <h3 class="h5 mb-1" style="color: #c5a04e;">Quick Links</h3>
                 <ul class="list-unstyled mb-0" style="font-size: 0.85rem;">
-                  <li><a href="{% url 'rooms:room_list' %}" style="color: rgba(255,255,255,0.6);">Our Rooms</a></li>
-                  <li><a href="{% url 'location_landing' %}" style="color: rgba(255,255,255,0.6);">Guest House in F-6/2</a></li>
-                  <li><a href="{% url 'location_islamabad' %}" style="color: rgba(255,255,255,0.6);">Guest House in Islamabad</a></li>
-                  <li><a href="{% url 'contact' %}" style="color: rgba(255,255,255,0.6);">Contact Us</a></li>
+                  <li><a href="{{ nav_rooms_url }}" style="color: rgba(255,255,255,0.6);">Our Rooms</a></li>
+                  <li><a href="{{ nav_about_url }}" style="color: rgba(255,255,255,0.6);">About</a></li>
+                  <li><a href="{{ nav_contact_url }}" style="color: rgba(255,255,255,0.6);">Contact Us</a></li>
                 </ul>
               </div>
               <div class="col-lg-4">
@@ -292,14 +343,13 @@
                 <ul class="list-unstyled mb-0" style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">
                   <li>Faisal Mosque — 5 min drive</li>
                   <li>Margalla Hills — 10 min drive</li>
-                  <li>F-6 Super Market — 3 min walk</li>
                   <li>Centaurus Mall — 8 min drive</li>
                 </ul>
               </div>
             </div>
             <div class="row text-center align-items-center pt-3" style="border-top: 1px solid rgba(197,160,78,0.3);">
               <div class="col-12">
-                <small style="color: rgba(255,255,255,0.5);">&copy; 2026 Blue Moon Residency — Guest House in F-6/2, Islamabad, Pakistan. All rights reserved.</small>
+                <small style="color: rgba(255,255,255,0.5);">&copy; 2026 {% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %} — Islamabad, Pakistan. All rights reserved.</small>
               </div>
             </div>
           </div>
@@ -311,11 +361,13 @@
     <button id="scroll-to-top" class="scroll-to-top" aria-label="Scroll to top">&#8679;</button>
 
     <!-- WhatsApp floating button -->
-    {% if seo_settings.phone %}
-    <a href="https://wa.me/{{ seo_settings.phone|cut:'+' |cut:' ' |cut:'-' }}" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+    {% with wa_phone=guest_house.phone|default:seo_settings.phone %}
+    {% if wa_phone %}
+    <a href="https://wa.me/{{ wa_phone|cut:'+' |cut:' ' |cut:'-' }}" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
       <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
     </a>
     {% endif %}
+    {% endwith %}
 
     <!-- Form loading overlay -->
     <div id="form-loading-overlay" class="form-loading-overlay">

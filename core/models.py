@@ -2,6 +2,71 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+class Property(models.Model):
+    """Represents a guest house property (e.g. Blue Moon Residency, Blue Moon Continental)."""
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(max_length=200, unique=True)
+    short_name = models.CharField(max_length=50, blank=True, help_text='Short name for UI tabs (e.g. Residency)')
+    is_active = models.BooleanField(default=True)
+
+    # Business Info
+    business_name = models.CharField(max_length=200)
+    street_address = models.CharField(max_length=300)
+    locality = models.CharField(max_length=100, default='Islamabad')
+    region = models.CharField(max_length=100, default='Islamabad Capital Territory')
+    postal_code = models.CharField(max_length=20, default='44000')
+    country = models.CharField(max_length=5, default='PK')
+    phone = models.CharField(max_length=30, blank=True)
+    phone2 = models.CharField(max_length=30, blank=True)
+    email = models.EmailField(blank=True)
+
+    # Location
+    latitude = models.DecimalField(max_digits=10, decimal_places=7, default=33.7294000)
+    longitude = models.DecimalField(max_digits=10, decimal_places=7, default=73.0931000)
+    google_maps_embed_url = models.URLField(max_length=500, blank=True)
+
+    # SEO
+    default_meta_title = models.CharField(max_length=70, blank=True)
+    default_meta_description = models.TextField(max_length=160, blank=True)
+    default_keywords = models.TextField(blank=True)
+    og_image = models.ImageField(upload_to='properties/seo/', blank=True, null=True)
+
+    # Pricing & Booking
+    currency_symbol = models.CharField(max_length=10, default='PKR')
+    price_range = models.CharField(max_length=20, blank=True)
+    check_in_time = models.CharField(max_length=10, default='14:00')
+    check_out_time = models.CharField(max_length=10, default='12:00')
+    booking_com_url = models.URLField(max_length=500, blank=True, default='')
+
+    # Discount
+    discount_percentage = models.DecimalField(
+        max_digits=5, decimal_places=2, default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text='Discount % applied to all rooms at this property (0-100)',
+    )
+    discount_active = models.BooleanField(
+        default=False,
+        help_text='Whether the property-wide discount is currently active',
+    )
+
+    # Branding
+    logo = models.ImageField(upload_to='properties/logos/', blank=True, null=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = 'Properties'
+        ordering = ['name']
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        from django.urls import reverse
+        return reverse('property_home', kwargs={'property_slug': self.slug})
+
+
 class SeoSettings(models.Model):
     """Singleton model for site-wide SEO settings editable from admin."""
     site_name = models.CharField(max_length=100, default='Blue Moon Residency')
@@ -76,7 +141,8 @@ class PageSeo(models.Model):
         ('location_near_faisal_mosque', 'Guest House Near Faisal Mosque'),
     ]
 
-    page = models.CharField(max_length=50, choices=PAGE_CHOICES, unique=True)
+    guest_house = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='page_seos', null=True, blank=True)
+    page = models.CharField(max_length=50, choices=PAGE_CHOICES)
     meta_title = models.CharField(max_length=70, blank=True, help_text='Page title (max 70 chars)')
     meta_description = models.TextField(max_length=160, blank=True, help_text='Meta description (max 160 chars)')
     keywords = models.TextField(blank=True, help_text='Comma-separated keywords')
@@ -91,6 +157,7 @@ class PageSeo(models.Model):
 
 class Testimonial(models.Model):
     """Guest reviews/testimonials displayed on site and used for AggregateRating schema."""
+    guest_house = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='testimonials', null=True, blank=True)
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100, blank=True, help_text='e.g. Lahore, Pakistan')
     rating = models.PositiveIntegerField(
@@ -111,6 +178,7 @@ class Testimonial(models.Model):
 
 class FAQ(models.Model):
     """Frequently asked questions — renders as FAQ schema for rich results."""
+    guest_house = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='faqs', null=True, blank=True)
     CATEGORY_CHOICES = [
         ('general', 'General'),
         ('booking', 'Booking & Payment'),
@@ -136,6 +204,7 @@ class FAQ(models.Model):
 
 class NearbyAttraction(models.Model):
     """Nearby landmarks and attractions for location content."""
+    guest_house = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='nearby_attractions', null=True, blank=True)
     CATEGORY_CHOICES = [
         ('landmark', 'Landmark'),
         ('shopping', 'Shopping'),

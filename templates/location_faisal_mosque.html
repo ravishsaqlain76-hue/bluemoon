@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Guest House Near Faisal Mosque Islamabad | Blue Moon Residency{% endif %}{% endblock %}
-{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Stay at Blue Moon Residency, just 5 minutes from Faisal Mosque in F-6/2 Islamabad. Comfortable rooms from PKR 5,500/night with free Wi-Fi and parking.{% endif %}{% endblock %}
-{% block meta_keywords %}guest house near faisal mosque, hotel near faisal mosque islamabad, accommodation near faisal mosque, guest house F-6 islamabad, blue moon residency{% endblock %}
-{% block og_title %}Guest House Near Faisal Mosque | Blue Moon Residency Islamabad{% endblock %}
-{% block og_description %}Just 5 minutes from Faisal Mosque! Comfortable rooms from PKR 5,500/night in F-6/2 Islamabad.{% endblock %}
+{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Guest House Near Faisal Mosque Islamabad | {{ business.name }}{% endif %}{% endblock %}
+{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Stay at {{ business.name }}, just 5 minutes from Faisal Mosque in {{ business.locality }} Islamabad. Comfortable rooms from PKR 5,500/night with free Wi-Fi and parking.{% endif %}{% endblock %}
+{% block meta_keywords %}guest house near faisal mosque, hotel near faisal mosque islamabad, accommodation near faisal mosque, guest house F-6 islamabad, {{ business.name|lower }}{% endblock %}
+{% block og_title %}Guest House Near Faisal Mosque | {{ business.name }} Islamabad{% endblock %}
+{% block og_description %}Just 5 minutes from Faisal Mosque! Comfortable rooms from PKR 5,500/night in {{ business.locality }} Islamabad.{% endblock %}
 
 {% block extra_schema %}
 {% include 'includes/review_schema.html' %}
@@ -28,7 +28,7 @@
 <div class="page-header d-print-none">
   <div class="container-xl">
     <nav aria-label="breadcrumb"><ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ nav_home_url }}">Home</a></li>
       <li class="breadcrumb-item active">Guest House Near Faisal Mosque</li>
     </ol></nav>
     <h1 class="page-title">Guest House Near Faisal Mosque, Islamabad</h1>
@@ -39,10 +39,10 @@
     <div class="row">
       <div class="col-lg-8">
         <article class="card mb-4"><div class="card-body">
-          <h2>Stay 5 Minutes from Faisal Mosque at Blue Moon Residency</h2>
+          <h2>Stay 5 Minutes from Faisal Mosque at {{ business.name }}</h2>
           <p>
-            <strong>Blue Moon Residency</strong> is the closest quality <strong>guest house to Faisal Mosque</strong>
-            in Islamabad. Located in <strong>F-6/2</strong> — just a 5-minute drive from Pakistan's iconic national
+            <strong>{{ business.name }}</strong> is the closest quality <strong>guest house to Faisal Mosque</strong>
+            in Islamabad. Located in <strong>{{ business.locality }}</strong> — just a 5-minute drive from Pakistan's iconic national
             mosque — we offer the perfect base for tourists, pilgrims, and anyone visiting the Faisal Mosque area.
           </p>
 
@@ -53,7 +53,7 @@
             at different times of day — including for Fajr prayer or the stunning sunset views — without a long commute.
           </p>
           <p>
-            From Blue Moon Residency, you can also walk to the <strong>Margalla Hills Trail 3 entrance</strong> (10 min drive),
+            From {{ business.name }}, you can also walk to the <strong>Margalla Hills Trail 3 entrance</strong> (10 min drive),
             making it an ideal base for combining mosque visits with nature hikes.
           </p>
 
@@ -87,7 +87,7 @@
                 <td><span class="badge bg-blue-lt">{{ room.get_room_type_display }}</span></td>
                 <td>{{ room.capacity }}</td>
                 <td>PKR {{ room.price_per_night|floatformat:"0"|intcomma }}</td>
-                <td><a href="{% url 'rooms:room_detail' room.slug %}" class="btn btn-sm btn-primary">View</a></td>
+                <td><a href="{% url 'rooms:room_detail' property_slug=guest_house.slug slug=room.slug %}" class="btn btn-sm btn-primary">View</a></td>
               </tr>
               {% endfor %}
             </tbody></table>
@@ -95,8 +95,8 @@
           {% endif %}
 
           <div class="mt-3">
-            <a href="{% url 'rooms:room_list' %}" class="btn btn-primary btn-lg">View All Rooms</a>
-            <a href="{% url 'contact' %}" class="btn btn-outline-primary btn-lg ms-2">Contact Us</a>
+            <a href="{{ nav_rooms_url }}" class="btn btn-primary btn-lg">View All Rooms</a>
+            <a href="{{ nav_contact_url }}" class="btn btn-outline-primary btn-lg ms-2">Contact Us</a>
           </div>
         </div></article>
 
@@ -115,18 +115,18 @@
 
       <div class="col-lg-4">
         <div class="card mb-3"><div class="card-header"><h3 class="card-title">Location Map</h3></div>
-          <div class="card-body p-2"><div class="map-container"><iframe src="{{ business.google_maps_embed_url }}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Blue Moon Residency Near Faisal Mosque"></iframe></div></div>
+          <div class="card-body p-2"><div class="map-container"><iframe src="{{ business.google_maps_embed_url }}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ business.name }} Near Faisal Mosque"></iframe></div></div>
         </div>
         <div class="card mb-3"><div class="card-body">
-          <strong>Blue Moon Residency</strong><br>{{ business.street_address }}<br>F-6/2, {{ business.locality }}, Pakistan<br>
+          <strong>{{ business.name }}</strong><br>{{ business.street_address }}<br>{{ business.locality }}, {{ business.region }}, Pakistan<br>
           {% if business.phone %}<a href="tel:{{ business.phone }}">{{ business.phone }}</a><br>{% endif %}
           {% if business.email %}<a href="mailto:{{ business.email }}">{{ business.email }}</a>{% endif %}
-          <div class="mt-3"><a href="{% url 'contact' %}" class="btn btn-primary w-100">Get Directions</a></div>
+          <div class="mt-3"><a href="{{ nav_contact_url }}" class="btn btn-primary w-100">Get Directions</a></div>
         </div></div>
         <div class="card bg-primary-lt"><div class="card-body text-center">
           <h3 class="card-title">No Advance Payment</h3>
           <p class="text-muted mb-2">Book now and pay at the front desk on arrival.</p>
-          <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">Book a Room</a>
+          <a href="{{ nav_rooms_url }}" class="btn btn-primary">Book a Room</a>
         </div></div>
       </div>
     </div>

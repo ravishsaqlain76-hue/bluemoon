@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}About Us | Blue Moon Residency - Guest House in Islamabad{% endif %}{% endblock %}
-{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Learn about Blue Moon Residency, a premium guest house in F-6/2 Islamabad offering comfortable accommodation, modern amenities, and warm Pakistani hospitality.{% endif %}{% endblock %}
-{% block og_title %}About Blue Moon Residency | Guest House in Islamabad{% endblock %}
-{% block og_description %}Learn about Blue Moon Residency, a premium guest house in F-6/2 Islamabad offering comfortable rooms and warm hospitality.{% endblock %}
+{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}About Us | {{ business.name }} - Guest House in Islamabad{% endif %}{% endblock %}
+{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Learn about {{ business.name }}, a premium guest house in {{ business.locality }} Islamabad offering comfortable accommodation, modern amenities, and warm Pakistani hospitality.{% endif %}{% endblock %}
+{% block og_title %}About {{ business.name }} | Guest House in Islamabad{% endblock %}
+{% block og_description %}Learn about {{ business.name }}, a premium guest house in {{ business.locality }} Islamabad offering comfortable rooms and warm hospitality.{% endblock %}
 
 {% block extra_schema %}
 {% include 'includes/review_schema.html' %}
@@ -53,10 +53,10 @@
 <div class="page-header d-print-none">
   <div class="container-xl">
     <nav aria-label="breadcrumb"><ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ nav_home_url }}">Home</a></li>
       <li class="breadcrumb-item active">About</li>
     </ol></nav>
-    <h1 class="page-title">About Blue Moon Residency</h1>
+    <h1 class="page-title">About {{ business.name }}</h1>
     <div class="page-pretitle">Who We Are</div>
   </div>
 </div>
@@ -68,15 +68,15 @@
           <div class="card-body">
             <h2>Your Trusted Guest House in Islamabad</h2>
             <p>
-              <strong>Blue Moon Residency</strong> is a well-established guest house situated in the prestigious
-              <strong>F-6/2 sector of Islamabad</strong>, Pakistan. We have been providing quality accommodation
+              <strong>{{ business.name }}</strong> is a well-established guest house situated in the prestigious
+              <strong>{{ business.locality }} sector of Islamabad</strong>, Pakistan. We have been providing quality accommodation
               to travelers, business professionals, and families who seek a comfortable, clean, and affordable
               place to stay in the heart of the capital.
             </p>
             <p>
-              Our property at <strong>House # 2-A, Justice Abdul Rasheed Road</strong> offers a peaceful retreat
+              Our property at <strong>{{ business.street_address }}</strong> offers a peaceful retreat
               with all modern amenities, while keeping you connected to Islamabad's vibrant city life.
-              Whether you need a short overnight stay or extended accommodation, Blue Moon Residency
+              Whether you need a short overnight stay or extended accommodation, {{ business.name }}
               delivers a home-like experience with professional service.
             </p>
 
@@ -100,7 +100,7 @@
                   </div>
                   <div>
                     <strong>Prime Location</strong>
-                    <p class="text-muted mb-0">In F-6/2, minutes from Faisal Mosque, Margalla Hills, and major hospitals.</p>
+                    <p class="text-muted mb-0">In {{ business.locality }}, minutes from Faisal Mosque, Margalla Hills, and major hospitals.</p>
                   </div>
                 </div>
               </div>
@@ -155,8 +155,8 @@
             </div>
 
             <div class="mt-4">
-              <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">View Our Rooms</a>
-              <a href="{% url 'contact' %}" class="btn btn-outline-primary ms-2">Get in Touch</a>
+              <a href="{{ nav_rooms_url }}" class="btn btn-primary">View Our Rooms</a>
+              <a href="{{ nav_contact_url }}" class="btn btn-outline-primary ms-2">Get in Touch</a>
             </div>
           </div>
         </div>
@@ -185,11 +185,11 @@
             <h3 class="card-title">Nearby Attractions</h3>
           </div>
           <div class="card-body">
-            <p class="text-muted mb-4">Blue Moon Residency is ideally located in F-6/2 Islamabad — surrounded by the city's most iconic landmarks, all just minutes away.</p>
+            <p class="text-muted mb-4">{{ business.name }} is ideally located in {{ business.locality }} Islamabad — surrounded by the city's most iconic landmarks, all just minutes away.</p>
             <div class="row g-3">
               <div class="col-md-6 col-lg-4">
                 <div class="card nearby-card position-relative">
-                  <img src="{% static 'pictures/faisal-mosque.jpg' %}" alt="Faisal Mosque - 5 min from Blue Moon Residency F-6/2 Islamabad" loading="lazy">
+                  <img src="{% static 'pictures/faisal-mosque.jpg' %}" alt="Faisal Mosque - 5 min from {{ business.name }} {{ business.locality }} Islamabad" loading="lazy">
                   <span class="distance-badge">5 min drive</span>
                   <div class="card-body text-center">
                     <strong>Faisal Mosque</strong>
@@ -199,7 +199,7 @@
               </div>
               <div class="col-md-6 col-lg-4">
                 <div class="card nearby-card position-relative">
-                  <img src="{% static 'pictures/4b.jpg' %}" alt="Pakistan Monument - 12 min from Blue Moon Residency Islamabad" loading="lazy">
+                  <img src="{% static 'pictures/4b.jpg' %}" alt="Pakistan Monument - 12 min from {{ business.name }} Islamabad" loading="lazy">
                   <span class="distance-badge">12 min drive</span>
                   <div class="card-body text-center">
                     <strong>Pakistan Monument</strong>
@@ -209,7 +209,7 @@
               </div>
               <div class="col-md-6 col-lg-4">
                 <div class="card nearby-card position-relative">
-                  <img src="{% static 'pictures/at-movenpick-islamabad.jpg' %}" alt="Centaurus Mall Movenpick - 8 min from Blue Moon Residency Islamabad" loading="lazy">
+                  <img src="{% static 'pictures/at-movenpick-islamabad.jpg' %}" alt="Centaurus Mall Movenpick - 8 min from {{ business.name }} Islamabad" loading="lazy">
                   <span class="distance-badge">8 min drive</span>
                   <div class="card-body text-center">
                     <strong>Centaurus Mall</strong>
@@ -224,7 +224,7 @@
         <!-- Location Map -->
         <div class="card mb-4">
           <div class="card-header">
-            <h3 class="card-title">Our Location — F-6/2 Islamabad</h3>
+            <h3 class="card-title">Our Location — {{ business.locality }} Islamabad</h3>
           </div>
           <div class="card-body">
             <div class="row align-items-center mb-3">
@@ -234,13 +234,13 @@
                     <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"/>
                   </svg>
                   <div>
-                    <strong>{{ seo_settings.street_address }}</strong><br>
-                    <span class="text-muted">F-6/2, {{ seo_settings.locality }}, Pakistan</span>
+                    <strong>{{ business.street_address }}</strong><br>
+                    <span class="text-muted">{{ business.locality }}, {{ business.region }}, Pakistan</span>
                   </div>
                 </div>
               </div>
               <div class="col-md-6 text-md-end mt-2 mt-md-0">
-                <a href="https://www.google.com/maps?q={{ seo_settings.latitude }},{{ seo_settings.longitude }}" target="_blank" rel="noopener" class="btn btn-primary">
+                <a href="https://www.google.com/maps?q={{ business.latitude }},{{ business.longitude }}" target="_blank" rel="noopener" class="btn btn-primary">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon me-1" width="20" height="20" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none">
                     <path d="M18.364 4.636a9 9 0 0 1 .203 12.519l-.203 .21l-4.243 4.242a3 3 0 0 1 -4.097 .135l-.144 -.135l-4.244 -4.243a9 9 0 0 1 12.728 -12.728zm-6.364 3.364a3 3 0 1 0 0 6a3 3 0 0 0 0 -6z"/>
                   </svg>
@@ -250,11 +250,11 @@
             </div>
             <div class="map-about">
               <iframe
-                src="{{ seo_settings.google_maps_embed_url }}"
+                src="{{ business.google_maps_embed_url }}"
                 allowfullscreen
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
-                title="Blue Moon Residency - F-6/2 Islamabad on Google Maps">
+                title="{{ business.name }} - {{ business.locality }} Islamabad on Google Maps">
               </iframe>
             </div>
           </div>

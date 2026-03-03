@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-from core.models import SeoSettings
 from .models import Room
 
 
-def room_list(request):
-    rooms = Room.objects.filter(status='available')
+def room_list(request, property_slug=None):
+    gh = getattr(request, 'guest_house', None)
+    rooms = Room.objects.filter(status='available').select_related('guest_house')
+    if gh:
+        rooms = rooms.filter(guest_house=gh)
 
     room_type = request.GET.get('type')
     if room_type:
@@ -37,7 +39,6 @@ def room_list(request):
     page = request.GET.get('page')
     rooms = paginator.get_page(page)
 
-    settings = SeoSettings.load()
     context = {
         'rooms': rooms,
         'room_types': Room.ROOM_TYPES,
@@ -46,19 +47,28 @@ def room_list(request):
         'current_min_price': min_price or '',
         'current_max_price': max_price or '',
         'current_capacity': capacity or '',
-        'currency': settings.currency_symbol,
+        'guest_house': gh,
+        'business': gh,
     }
     return render(request, 'rooms/room_list.html', context)
 
 
-def room_detail(request, slug):
-    room = get_object_or_404(Room, slug=slug)
-    related_rooms = Room.objects.filter(
-        room_type=room.room_type, status='available'
-    ).exclude(pk=room.pk)[:3]
-    settings = SeoSettings.load()
+def room_detail(request, slug, property_slug=None):
+    gh = getattr(request, 'guest_house', None)
+    if gh:
+        room = get_object_or_404(Room, slug=slug, guest_house=gh)
+        related_rooms = Room.objects.filter(
+            guest_house=gh, room_type=room.room_type, status='available'
+        ).select_related('guest_house').exclude(pk=room.pk)[:3]
+    else:
+        room = get_object_or_404(Room, slug=slug)
+        related_rooms = Room.objects.filter(
+            room_type=room.room_type, status='available'
+        ).select_related('guest_house').exclude(pk=room.pk)[:3]
+
     return render(request, 'rooms/room_detail.html', {
         'room': room,
         'related_rooms': related_rooms,
-        'business': settings,
+        'guest_house': gh or room.guest_house,
+        'business': gh or room.guest_house,
     })

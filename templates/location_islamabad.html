@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Best Guest House in Islamabad | Blue Moon Residency{% endif %}{% endblock %}
-{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Looking for a guest house in Islamabad? Blue Moon Residency in F-6/2 offers clean rooms from PKR 5,500/night, free Wi-Fi, parking, near Faisal Mosque. Pay at check-in!{% endif %}{% endblock %}
+{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Best Guest House in Islamabad | {{ business.name }}{% endif %}{% endblock %}
+{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Looking for a guest house in Islamabad? {{ business.name }} in {{ business.locality }} offers clean rooms from PKR 5,500/night, free Wi-Fi, parking, near Faisal Mosque. Pay at check-in!{% endif %}{% endblock %}
 {% block meta_keywords %}guest house in islamabad, best guest house islamabad, cheap guest house islamabad, hotel in islamabad, accommodation islamabad, islamabad guest house near me{% endblock %}
-{% block og_title %}Best Guest House in Islamabad | Blue Moon Residency{% endblock %}
-{% block og_description %}Clean, comfortable guest house in Islamabad's F-6/2 sector. Rooms from PKR 5,500/night. Near Faisal Mosque & Margalla Hills.{% endblock %}
+{% block og_title %}Best Guest House in Islamabad | {{ business.name }}{% endblock %}
+{% block og_description %}Clean, comfortable guest house in Islamabad's {{ business.locality }} sector. Rooms from PKR 5,500/night. Near Faisal Mosque & Margalla Hills.{% endblock %}
 
 {% block extra_schema %}
 {% include 'includes/faq_schema.html' %}
@@ -30,7 +30,7 @@
 <div class="page-header d-print-none">
   <div class="container-xl">
     <nav aria-label="breadcrumb"><ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ nav_home_url }}">Home</a></li>
       <li class="breadcrumb-item active">Guest House in Islamabad</li>
     </ol></nav>
     <h1 class="page-title">Guest House in Islamabad</h1>
@@ -41,15 +41,15 @@
     <div class="row">
       <div class="col-lg-8">
         <article class="card mb-4"><div class="card-body">
-          <h2>Blue Moon Residency — Your Ideal Guest House in Islamabad</h2>
-          <p>Planning a visit to Pakistan's capital? <strong>Blue Moon Residency</strong> is one of the best-rated <strong>guest houses in Islamabad</strong>, located in the upscale <strong>F-6/2 sector</strong>. We provide comfortable, clean, and affordable accommodation for all types of travelers — business professionals, tourists, families, and medical visitors.</p>
+          <h2>{{ business.name }} — Your Ideal Guest House in Islamabad</h2>
+          <p>Planning a visit to Pakistan's capital? <strong>{{ business.name }}</strong> is one of the best-rated <strong>guest houses in Islamabad</strong>, located in the upscale <strong>{{ business.locality }} sector</strong>. We provide comfortable, clean, and affordable accommodation for all types of travelers — business professionals, tourists, families, and medical visitors.</p>
 
           <h3>Why Islamabad Visitors Choose Our Guest House</h3>
-          <p>Islamabad has many accommodation options, but most hotels are either overpriced or poorly located. Blue Moon Residency solves both problems — we're in one of the city's best residential sectors (F-6) at rates starting from just <strong>PKR 5,500/night</strong>, with no advance payment required.</p>
+          <p>Islamabad has many accommodation options, but most hotels are either overpriced or poorly located. {{ business.name }} solves both problems — we're in one of the city's best residential sectors ({{ business.locality }}) at rates starting from just <strong>PKR 5,500/night</strong>, with no advance payment required.</p>
 
           <div class="row mb-3">
             <div class="col-md-6"><ul>
-              <li>Central F-6/2 location with easy access to all sectors</li>
+              <li>Central {{ business.locality }} location with easy access to all sectors</li>
               <li>3-minute walk to F-6 Super Market for restaurants and shopping</li>
               <li>5 minutes to Faisal Mosque</li>
               <li>10 minutes to Margalla Hills hiking trails</li>
@@ -75,8 +75,8 @@
           <p>We offer Standard, Deluxe, Suite, and Family rooms. All rooms include air conditioning, free Wi-Fi, LED TV, attached bathroom with hot water, and daily housekeeping.</p>
 
           <div class="mt-3">
-            <a href="{% url 'rooms:room_list' %}" class="btn btn-primary btn-lg">Browse All Rooms</a>
-            <a href="{% url 'contact' %}" class="btn btn-outline-primary btn-lg ms-2">Contact Us</a>
+            <a href="{{ nav_rooms_url }}" class="btn btn-primary btn-lg">Browse All Rooms</a>
+            <a href="{{ nav_contact_url }}" class="btn btn-outline-primary btn-lg ms-2">Contact Us</a>
           </div>
         </div></article>
 
@@ -132,19 +132,19 @@
 
       <div class="col-lg-4">
         <div class="card mb-3"><div class="card-header"><h3 class="card-title">Our Location in Islamabad</h3></div>
-          <div class="card-body p-2"><div class="map-container"><iframe src="{{ business.google_maps_embed_url }}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Blue Moon Residency Islamabad Map"></iframe></div></div>
+          <div class="card-body p-2"><div class="map-container"><iframe src="{{ business.google_maps_embed_url }}" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="{{ business.name }} Islamabad Map"></iframe></div></div>
         </div>
         <div class="card mb-3"><div class="card-body">
-          <strong>Blue Moon Residency</strong><br>
-          {{ business.street_address }}<br>F-6/2, {{ business.locality }}, Pakistan<br>
+          <strong>{{ business.name }}</strong><br>
+          {{ business.street_address }}<br>{{ business.locality }}, {{ business.region }}, Pakistan<br>
           {% if business.phone %}<a href="tel:{{ business.phone }}">{{ business.phone }}</a><br>{% endif %}
           {% if business.email %}<a href="mailto:{{ business.email }}">{{ business.email }}</a>{% endif %}
-          <div class="mt-3"><a href="{% url 'contact' %}" class="btn btn-primary w-100">Send Inquiry</a></div>
+          <div class="mt-3"><a href="{{ nav_contact_url }}" class="btn btn-primary w-100">Send Inquiry</a></div>
         </div></div>
         <div class="card bg-primary-lt"><div class="card-body text-center">
           <h3 class="card-title">Book Now — Pay Later</h3>
           <p class="text-muted mb-2">No advance payment. Pay at check-in.</p>
-          <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">View Rooms & Prices</a>
+          <a href="{{ nav_rooms_url }}" class="btn btn-primary">View Rooms & Prices</a>
         </div></div>
       </div>
     </div>

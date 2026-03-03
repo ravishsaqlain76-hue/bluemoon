@@ -8,7 +8,20 @@
         <div class="page-pretitle">{% block pretitle %}Dashboard{% endblock %}</div>
         <h2 class="page-title">{% block page_title %}{% endblock %}</h2>
       </div>
-      <div class="col-auto ms-auto">
+      <div class="col-auto ms-auto d-flex align-items-center gap-2">
+        {% if is_ceo and all_properties %}
+        <form method="post" action="{% url 'bookings:switch_property' %}" class="d-inline-flex align-items-center gap-2">
+          {% csrf_token %}
+          <select name="property_id" class="form-select form-select-sm" style="width: auto;" onchange="this.form.submit()">
+            <option value="all" {% if not current_guest_house %}selected{% endif %}>All Properties</option>
+            {% for prop in all_properties %}
+            <option value="{{ prop.pk }}" {% if current_guest_house.pk == prop.pk %}selected{% endif %}>{{ prop.short_name|default:prop.name }}</option>
+            {% endfor %}
+          </select>
+        </form>
+        {% elif current_guest_house %}
+        <span class="badge bg-blue-lt">{{ current_guest_house.short_name|default:current_guest_house.name }}</span>
+        {% endif %}
         {% block header_actions %}{% endblock %}
       </div>
     </div>
@@ -16,6 +29,18 @@
 </div>
 <div class="page-body">
   <div class="container-xl">
+    {% if messages %}
+    <div class="mb-3">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+        <div class="d-flex">
+          <div>{{ message }}</div>
+        </div>
+        <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
     {% block dashboard_content %}{% endblock %}
   </div>
 </div>

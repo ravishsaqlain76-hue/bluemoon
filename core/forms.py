@@ -1,5 +1,5 @@
 from django import forms
-from .models import PageSeo, Testimonial, FAQ
+from .models import PageSeo, Testimonial, FAQ, Property
 
 
 class PageSeoForm(forms.ModelForm):
@@ -36,4 +36,27 @@ class FAQForm(forms.ModelForm):
             'answer': forms.Textarea(attrs={'class': 'form-control', 'rows': 4}),
             'category': forms.Select(attrs={'class': 'form-select'}),
             'order': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
+
+
+class PropertyDiscountForm(forms.ModelForm):
+    class Meta:
+        model = Property
+        fields = ['discount_percentage', 'discount_active']
+        widgets = {
+            'discount_percentage': forms.NumberInput(attrs={
+                'class': 'form-control form-control-sm',
+                'min': '0',
+                'max': '100',
+                'step': '0.01',
+                'style': 'width: 120px;',
+                'placeholder': '0',
+            }),
+            'discount_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input',
+            }),
+        }
+        labels = {
+            'discount_percentage': 'Discount %',
+            'discount_active': 'Active',
         }

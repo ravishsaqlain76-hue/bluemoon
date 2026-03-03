@@ -1,7 +1,7 @@
 {% extends 'dashboards/base_dashboard.html' %}
 {% load humanize %}
 
-{% block title %}Bookings Dashboard | Blue Moon{% endblock %}
+{% block title %}Bookings Dashboard | {% if current_guest_house %}{{ current_guest_house.short_name|default:current_guest_house.name }}{% else %}Blue Moon{% endif %}{% endblock %}
 {% block pretitle %}Receptionist Panel{% endblock %}
 {% block page_title %}Booking Management{% endblock %}
 

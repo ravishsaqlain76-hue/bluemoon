@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
-{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Contact Us | Blue Moon Residency Islamabad{% endif %}{% endblock %}
-{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Get in touch with Blue Moon Residency in F-6/2 Islamabad. Call, email, or visit us at House # 2-A, Justice Abdul Rasheed Road. We're here to help with your booking.{% endif %}{% endblock %}
-{% block og_title %}Contact Blue Moon Residency | Guest House in Islamabad{% endblock %}
-{% block og_description %}Get in touch with Blue Moon Residency in F-6/2 Islamabad. We're here to help with your booking and inquiries.{% endblock %}
+{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Contact Us | {{ business.name }} Islamabad{% endif %}{% endblock %}
+{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Get in touch with {{ business.name }} in {{ business.locality }} Islamabad. Call, email, or visit us at {{ business.street_address }}. We're here to help with your booking.{% endif %}{% endblock %}
+{% block og_title %}Contact {{ business.name }} | Guest House in Islamabad{% endblock %}
+{% block og_description %}Get in touch with {{ business.name }} in {{ business.locality }} Islamabad. We're here to help with your booking and inquiries.{% endblock %}
 
 {% block nav_contact %}active{% endblock %}
 
@@ -19,8 +19,8 @@
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   "@id": "{{ SITE_URL }}/#hotel",
-  "name": "Blue Moon Residency",
-  "description": "Contact Blue Moon Residency, the best guest house in F-6/2 Islamabad. Call, email, or visit us for room bookings and enquiries.",
+  "name": "{{ business.name }}",
+  "description": "Contact {{ business.name }}, the best guest house in {{ business.locality }} Islamabad. Call, email, or visit us for room bookings and enquiries.",
   "url": "{{ SITE_URL }}/contact/",
   "telephone": "{{ business.phone }}",
   "email": "{{ business.email }}",
@@ -84,8 +84,8 @@
 {% block content %}
 <div class="page-header d-print-none">
   <div class="container-xl">
-    <div class="page-pretitle">Get in touch with the best guest house in F-6/2 Islamabad</div>
-    <h1 class="page-title">Contact Blue Moon Residency</h1>
+    <div class="page-pretitle">Get in touch with the best guest house in {{ business.locality }} Islamabad</div>
+    <h1 class="page-title">Contact {{ business.name }}</h1>
   </div>
 </div>
 <div class="page-body">
@@ -135,9 +135,9 @@
                 </svg>
               </div>
               <div>
-                <strong>Blue Moon Residency</strong><br>
+                <strong>{{ business.name }}</strong><br>
                 {{ business.street_address }}<br>
-                F-6/2, {{ business.locality }}, Pakistan<br>
+                {{ business.locality }}, {{ business.region }}, Pakistan<br>
                 {{ business.postal_code }}
               </div>
             </div>
@@ -183,7 +183,7 @@
                 allowfullscreen
                 loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
-                title="Blue Moon Residency - F-6/2 Islamabad Map">
+                title="{{ business.name }} - {{ business.locality }} Islamabad Map">
               </iframe>
             </div>
           </div>
@@ -194,7 +194,7 @@
     <!-- Full-width Map -->
     <div class="card mt-4">
       <div class="card-header">
-        <h3 class="card-title">Blue Moon Residency — F-6/2, Islamabad</h3>
+        <h3 class="card-title">{{ business.name }} — {{ business.locality }}, Islamabad</h3>
       </div>
       <div class="card-body p-2">
         <div class="map-full">
@@ -203,7 +203,7 @@
             allowfullscreen
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
-            title="Blue Moon Residency Location - House 2-A, Justice Abdul Rasheed Road, F-6/2 Islamabad">
+            title="{{ business.name }} Location - {{ business.street_address }}, {{ business.locality }} Islamabad">
           </iframe>
         </div>
         <div class="text-center mt-3 mb-2">

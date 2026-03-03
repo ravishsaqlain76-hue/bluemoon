@@ -14,8 +14,8 @@ def cancel_bookings(modeladmin, request, queryset):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['booking_reference', 'get_guest_name', 'get_guest_email', 'get_guest_phone', 'room', 'check_in', 'check_out', 'total_price', 'status', 'get_booking_type', 'created_at']
-    list_filter = ['status', 'payment_method', 'room', 'created_at']
+    list_display = ['booking_reference', 'guest_house', 'get_guest_name', 'get_guest_email', 'get_guest_phone', 'room', 'check_in', 'check_out', 'total_price', 'status', 'get_booking_type', 'created_at']
+    list_filter = ['guest_house', 'status', 'payment_method', 'room', 'created_at']
     search_fields = ['booking_reference', 'user__username', 'room__name', 'guest_name', 'guest_email', 'guest_phone']
     readonly_fields = ['booking_reference', 'created_at', 'updated_at']
     actions = [approve_bookings, cancel_bookings]

@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Rooms & Prices | Blue Moon Residency Guest House Islamabad{% endif %}{% endblock %}
-{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Browse rooms at Blue Moon Residency, F-6/2 Islamabad. Standard, Deluxe, Suite & Family rooms from PKR 5,500/night. Free Wi-Fi, AC, parking. Pay at check-in!{% endif %}{% endblock %}
+{% block title %}{% if page_seo.meta_title %}{{ page_seo.meta_title }}{% else %}Rooms & Prices | {{ guest_house.name }}{% endif %}{% endblock %}
+{% block meta_description %}{% if page_seo.meta_description %}{{ page_seo.meta_description }}{% else %}Browse rooms at {{ guest_house.name }}, {{ guest_house.locality }}. Standard, Deluxe, Suite & Family rooms from PKR 5,500/night. Free Wi-Fi, AC, parking. Pay at check-in!{% endif %}{% endblock %}
 {% block meta_keywords %}guest house rooms islamabad, hotel rooms F-6 islamabad, blue moon residency rooms, cheap rooms islamabad, guest house rates islamabad{% endblock %}
-{% block og_title %}Rooms & Prices | Blue Moon Residency Islamabad{% endblock %}
-{% block og_description %}Browse rooms from PKR 5,500/night at Blue Moon Residency, F-6/2 Islamabad. No advance payment required.{% endblock %}
+{% block og_title %}Rooms & Prices | {{ guest_house.name }}{% endblock %}
+{% block og_description %}Browse rooms from PKR 5,500/night at {{ guest_house.name }}, {{ guest_house.locality }}. No advance payment required.{% endblock %}
 {% block nav_rooms %}active{% endblock %}
 
 {% block extra_schema %}
@@ -21,55 +21,15 @@
 <div class="page-header d-print-none">
   <div class="container-xl">
     <nav aria-label="breadcrumb"><ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+      <li class="breadcrumb-item"><a href="{{ nav_home_url }}">Home</a></li>
       <li class="breadcrumb-item active">Rooms</li>
     </ol></nav>
-    <h1 class="page-title">Guest House Rooms in F-6/2 Islamabad</h1>
-    <div class="page-pretitle">Blue Moon Residency — Accommodation</div>
+    <h1 class="page-title">Guest House Rooms in {{ guest_house.locality }}</h1>
+    <div class="page-pretitle">{{ guest_house.name }} — Accommodation</div>
   </div>
 </div>
 <div class="page-body">
   <div class="container-xl">
-    <!-- Filters -->
-    <div class="card mb-4">
-      <div class="card-body">
-        <form method="get" class="row g-3 align-items-end">
-          <div class="col-md-2">
-            <label class="form-label">Room Type</label>
-            <select name="type" class="form-select">
-              <option value="">All Types</option>
-              {% for value, label in room_types %}
-                <option value="{{ value }}" {% if current_type == value %}selected{% endif %}>{{ label }}</option>
-              {% endfor %}
-            </select>
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Min Price (PKR)</label>
-            <input type="number" name="min_price" class="form-control" placeholder="0" value="{{ current_min_price }}">
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Max Price (PKR)</label>
-            <input type="number" name="max_price" class="form-control" placeholder="Any" value="{{ current_max_price }}">
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Guests</label>
-            <input type="number" name="capacity" class="form-control" placeholder="Any" min="1" value="{{ current_capacity }}">
-          </div>
-          <div class="col-md-2">
-            <label class="form-label">Sort By</label>
-            <select name="sort" class="form-select">
-              <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name</option>
-              <option value="price_low" {% if current_sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
-              <option value="price_high" {% if current_sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
-              <option value="capacity" {% if current_sort == 'capacity' %}selected{% endif %}>Capacity</option>
-            </select>
-          </div>
-          <div class="col-md-2">
-            <button type="submit" class="btn btn-primary w-100">Filter</button>
-          </div>
-        </form>
-      </div>
-    </div>
 
     <!-- Room Cards -->
     {% if rooms %}
@@ -105,7 +65,7 @@
                     <span class="h3 mb-0">PKR {{ room.price_per_night|floatformat:"0"|intcomma }}</span>
                     <span class="text-muted">/ night</span>
                   </div>
-                  <a href="{% url 'rooms:room_detail' room.slug %}" class="btn btn-primary">View Details</a>
+                  <a href="{% url 'rooms:room_detail' property_slug=guest_house.slug slug=room.slug %}" class="btn btn-primary">View Details</a>
                 </div>
               </div>
             </div>
@@ -144,7 +104,7 @@
         <p class="empty-title">No rooms found</p>
         <p class="empty-subtitle text-muted">Try adjusting your filters or check back later.</p>
         <div class="empty-action">
-          <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">Clear Filters</a>
+          <a href="{{ nav_rooms_url }}" class="btn btn-primary">Clear Filters</a>
         </div>
       </div>
     {% endif %}

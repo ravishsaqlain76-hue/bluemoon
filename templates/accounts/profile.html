@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Profile | Blue Moon{% endblock %}
+{% block title %}Profile | {% if guest_house %}{{ guest_house.short_name|default:guest_house.name }}{% else %}Blue Moon{% endif %}{% endblock %}
 
 {% block content %}
 <div class="page-header d-print-none">

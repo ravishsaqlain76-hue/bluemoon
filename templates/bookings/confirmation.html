@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}Booking Confirmed | Blue Moon{% endblock %}
+{% block title %}Booking Confirmed | {% if guest_house %}{{ guest_house.short_name|default:guest_house.name }}{% else %}Blue Moon{% endif %}{% endblock %}
 
 {% block content %}
 <div class="page-body">
@@ -105,7 +105,7 @@
           </div>
           <div class="card-footer d-flex justify-content-between">
             <a href="{% url 'accounts:dashboard' %}" class="btn btn-ghost-secondary">Go to Dashboard</a>
-            <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">Browse More Rooms</a>
+            <a href="{% url 'rooms:room_list' property_slug=guest_house.slug %}" class="btn btn-primary">Browse More Rooms</a>
           </div>
         </div>
       </div>

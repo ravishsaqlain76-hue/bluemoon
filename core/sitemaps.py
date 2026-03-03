@@ -1,27 +1,36 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from rooms.models import Room
+from core.models import Property
 
 
 class StaticSitemap(Sitemap):
-    priority = 0.8
     changefreq = 'weekly'
 
     def items(self):
-        return [
-            'home', 'about', 'contact',
-            'location_landing', 'location_islamabad', 'location_near_faisal_mosque',
-        ]
+        """Generate static pages for each active property."""
+        pages = []
+        for prop in Property.objects.filter(is_active=True):
+            slug = prop.slug
+            pages.append(('property_home', slug, 1.0))
+            pages.append(('property_about', slug, 0.8))
+            pages.append(('property_contact', slug, 0.8))
+            pages.append(('property_location_landing', slug, 0.9))
+            pages.append(('property_location_islamabad', slug, 0.9))
+            pages.append(('property_location_near_faisal_mosque', slug, 0.9))
+        # Root page
+        pages.append(('home', None, 0.5))
+        return pages
 
     def location(self, item):
-        return reverse(item)
+        name, slug, _ = item
+        if slug:
+            return reverse(name, kwargs={'property_slug': slug})
+        return reverse(name)
 
     def priority(self, item):
-        if item == 'home':
-            return 1.0
-        if item.startswith('location'):
-            return 0.9
-        return 0.8
+        _, _, prio = item
+        return prio
 
 
 class RoomSitemap(Sitemap):
@@ -29,13 +38,15 @@ class RoomSitemap(Sitemap):
     priority = 0.9
 
     def items(self):
-        return Room.objects.filter(status='available')
+        return Room.objects.filter(status='available').select_related('guest_house')
 
     def lastmod(self, obj):
         return obj.updated_at
 
     def location(self, obj):
-        return reverse('rooms:room_detail', args=[obj.slug])
+        if obj.guest_house:
+            return reverse('rooms:room_detail', kwargs={'property_slug': obj.guest_house.slug, 'slug': obj.slug})
+        return f'/rooms/{obj.slug}/'
 
 
 class RoomListSitemap(Sitemap):
@@ -43,7 +54,7 @@ class RoomListSitemap(Sitemap):
     changefreq = 'daily'
 
     def items(self):
-        return ['rooms:room_list']
+        return Property.objects.filter(is_active=True)
 
-    def location(self, item):
-        return reverse(item)
+    def location(self, prop):
+        return reverse('rooms:room_list', kwargs={'property_slug': prop.slug})

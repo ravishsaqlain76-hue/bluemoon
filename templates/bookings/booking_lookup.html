@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}Check Booking Status | Blue Moon{% endblock %}
+{% block title %}Check Booking Status | {% if guest_house %}{{ guest_house.short_name|default:guest_house.name }}{% else %}Blue Moon{% endif %}{% endblock %}
 
 {% block content %}
 <div class="page-header d-print-none">

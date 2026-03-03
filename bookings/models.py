@@ -16,6 +16,7 @@ class Booking(models.Model):
         ('check_in', 'Pay at Check-in'),
     ]
 
+    guest_house = models.ForeignKey('core.Property', on_delete=models.CASCADE, related_name='bookings', null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='bookings')
     guest_name = models.CharField(max_length=100, blank=True)
     guest_email = models.EmailField(blank=True)
@@ -25,6 +26,8 @@ class Booking(models.Model):
     check_out = models.DateField()
     guests = models.PositiveIntegerField(default=1)
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    original_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     booking_reference = models.CharField(max_length=12, unique=True, editable=False)
     payment_method = models.CharField(max_length=20, choices=PAYMENT_CHOICES, default='check_in')

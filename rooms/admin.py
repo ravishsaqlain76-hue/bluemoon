@@ -9,15 +9,15 @@ class RoomImageInline(admin.TabularInline):
 
 @admin.register(Room)
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ['name', 'room_type', 'price_per_night', 'capacity', 'status', 'featured']
-    list_filter = ['room_type', 'status', 'featured']
+    list_display = ['name', 'guest_house', 'room_type', 'price_per_night', 'capacity', 'status', 'featured']
+    list_filter = ['guest_house', 'room_type', 'status', 'featured']
     list_editable = ['status', 'price_per_night', 'featured']
     search_fields = ['name', 'description']
     prepopulated_fields = {'slug': ('name',)}
     inlines = [RoomImageInline]
     fieldsets = [
         (None, {
-            'fields': ['name', 'slug', 'room_type', 'description', 'price_per_night', 'capacity', 'status', 'amenities', 'featured', 'bed_type', 'room_size'],
+            'fields': ['guest_house', 'name', 'slug', 'room_type', 'description', 'price_per_night', 'capacity', 'status', 'amenities', 'featured', 'bed_type', 'room_size'],
         }),
         ('SEO', {
             'classes': ('collapse',),
@@ -29,4 +29,4 @@ class RoomAdmin(admin.ModelAdmin):
 @admin.register(RoomImage)
 class RoomImageAdmin(admin.ModelAdmin):
     list_display = ['room', 'caption', 'is_primary']
-    list_filter = ['is_primary']
+    list_filter = ['is_primary', 'room__guest_house']

@@ -1,8 +1,10 @@
 {% extends 'dashboards/base_dashboard.html' %}
 
-{% block title %}Marketing Dashboard | Blue Moon{% endblock %}
+{% block title %}Marketing Dashboard | {% if current_guest_house %}{{ current_guest_house.short_name|default:current_guest_house.name }}{% else %}Blue Moon{% endif %}{% endblock %}
 {% block pretitle %}Marketing Panel{% endblock %}
 {% block page_title %}Content & SEO Management{% endblock %}
+
+{% block header_actions %}{% endblock %}
 
 {% block dashboard_content %}
 <!-- Page SEO -->

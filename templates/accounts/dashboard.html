@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load humanize %}
 
-{% block title %}Dashboard | Blue Moon{% endblock %}
+{% block title %}Dashboard | {% if guest_house %}{{ guest_house.short_name|default:guest_house.name }}{% else %}Blue Moon{% endif %}{% endblock %}
 
 {% block content %}
 <div class="page-header d-print-none">
@@ -50,7 +50,7 @@
         <div class="card">
           <div class="card-body">
             <div class="subheader">Quick Actions</div>
-            <a href="{% url 'rooms:room_list' %}" class="btn btn-primary btn-sm mt-1">Browse Rooms</a>
+            <a href="{{ nav_rooms_url|default:"/" }}" class="btn btn-primary btn-sm mt-1">Browse Rooms</a>
           </div>
         </div>
       </div>
@@ -110,7 +110,7 @@
             <p class="empty-title">No bookings yet</p>
             <p class="empty-subtitle text-muted">Start by browsing our available rooms.</p>
             <div class="empty-action">
-              <a href="{% url 'rooms:room_list' %}" class="btn btn-primary">Browse Rooms</a>
+              <a href="{{ nav_rooms_url|default:"/" }}" class="btn btn-primary">Browse Rooms</a>
             </div>
           </div>
         </div>
