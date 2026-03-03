@@ -226,7 +226,7 @@
     <div class="container-fluid position-relative p-0">
         <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
             <a href="{{ nav_home_url }}" class="navbar-brand p-0">
-                <h1 class="m-0" style="color: #c5a04e;"><img src="{% static 'pak.png' %}" alt="{{ business.name }}" height="110" class="me-2" style="border-radius: 4px;">{{ business.name }}</h1>
+                <h1 class="m-0" style="color: #c5a04e;"><img src="{% static 'pak.png' %}" alt="{{ business.name }}" class="me-2 landing-logo" style="border-radius: 4px;">{{ business.name }}</h1>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
@@ -247,7 +247,7 @@
             </div>
         </nav>
 
-        <div class="container-fluid bg-primary py-5 mb-5 hero-header" style="min-height: 600px;">
+        <div class="container-fluid bg-primary py-5 mb-5 hero-header hero-header-landing">
             <div class="hero-slideshow">
                 <div class="hero-slide"></div>
                 <div class="hero-slide"></div>
@@ -258,9 +258,9 @@
                     <div class="col-lg-10 pt-lg-5 mt-lg-5 text-center">
                         <h1 class="display-3 text-white mb-3 animated slideInDown">{{ business.name }}</h1>
                         <p class="fs-4 text-white mb-4 animated slideInDown">Best <strong>Guest House in {{ business.locality }}</strong> — Budget Rooms at {{ business.name }}, Free Wi-Fi &amp; Parking</p>
-                        <div class="position-relative d-inline-flex align-items-center animated slideInDown">
-                            <a href="{{ nav_rooms_url }}" class="btn btn-primary py-3 px-5 me-3 rounded-pill" style="font-size: 1.1rem;">Browse Rooms</a>
-                            <a href="{{ nav_contact_url }}" class="btn btn-outline-light py-3 px-5 rounded-pill" style="font-size: 1.1rem;">Contact Us</a>
+                        <div class="position-relative d-inline-flex flex-wrap justify-content-center align-items-center gap-2 animated slideInDown">
+                            <a href="{{ nav_rooms_url }}" class="btn btn-primary py-2 py-md-3 px-4 px-md-5 rounded-pill">Browse Rooms</a>
+                            <a href="{{ nav_contact_url }}" class="btn btn-outline-light py-2 py-md-3 px-4 px-md-5 rounded-pill">Contact Us</a>
                         </div>
                         {% if review_count > 0 %}
                         <div class="mt-4 animated slideInDown">

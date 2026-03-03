@@ -6,8 +6,10 @@
     --dark: #0f1117;
 }
 
+/* Prevent horizontal overflow on landing page */
 .landing-page {
     font-family: 'Nunito', sans-serif;
+    overflow-x: hidden;
 }
 
 .fw-medium {
@@ -288,6 +290,63 @@
 
 .landing-page .text-primary {
     color: var(--primary) !important;
+}
+
+/* Landing page logo */
+.landing-logo {
+    height: 110px;
+}
+
+/* Hero height */
+.hero-header-landing {
+    min-height: 600px;
+}
+
+/* Mobile fixes for landing page */
+@media (max-width: 767.98px) {
+    /* Navbar logo shrink */
+    .landing-logo {
+        height: 50px;
+    }
+
+    /* Hero section scale down */
+    .hero-header-landing {
+        min-height: 400px;
+    }
+    .landing-page .hero-header h1.display-3 {
+        font-size: 1.6rem !important;
+    }
+    .landing-page .hero-header .fs-4 {
+        font-size: 1rem !important;
+    }
+    .landing-page .hero-header .py-5 {
+        padding-top: 1.5rem !important;
+        padding-bottom: 1.5rem !important;
+    }
+
+    /* Section title lines must not overflow container */
+    .landing-page .section-title::before {
+        width: calc(100% + 20px);
+        left: -10px;
+    }
+    .landing-page .section-title::after {
+        width: calc(100% + 30px);
+        left: -15px;
+    }
+    .landing-page .section-title.text-start::before {
+        width: calc(100% + 10px);
+        left: 0;
+    }
+    .landing-page .section-title.text-start::after {
+        width: calc(100% + 15px);
+        left: 0;
+    }
+
+    /* Ensure images never overflow */
+    .landing-page img {
+        max-width: 100%;
+        height: auto;
+    }
 }
 
 

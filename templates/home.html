@@ -23,7 +23,13 @@
     color: white;
     margin-top: -1px;
   }
-  .hero-section h1 { font-size: 2.8rem; font-weight: 800; color: #c5a04e; }
+  .hero-section h1 { font-size: 2.8rem; font-weight: 800; color: #c5a04e; word-wrap: break-word; }
+  @media (max-width: 767.98px) {
+    .hero-section { padding: 2rem 0; }
+    .hero-section h1 { font-size: 1.6rem !important; }
+    .hero-section .lead { font-size: 0.95rem; }
+    .hero-section img { height: 70px !important; }
+  }
   .search-card {
     background: rgba(255,255,255,0.95);
     backdrop-filter: blur(10px);

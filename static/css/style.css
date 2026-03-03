@@ -1,7 +1,8 @@
 /* ===== Blue Moon Residency — Global Styles ===== */
 
-/* Smooth scrolling */
-html {
+/* Prevent horizontal overflow (main cause of "zoomed" look on mobile) */
+html, body {
+  overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
@@ -261,10 +262,41 @@ footer .list-unstyled a:hover {
 
 /* ---------- Mobile responsive adjustments ---------- */
 @media (max-width: 767.98px) {
+  /* Disable hover effects on touch devices */
   .card:hover {
     transform: none;
     box-shadow: none;
   }
+  .btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Scale down large headings */
+  h1, .h1, .page-title {
+    font-size: 1.5rem !important;
+  }
+  h2, .h2 {
+    font-size: 1.25rem !important;
+  }
+  h3, .h3, .card-title {
+    font-size: 1rem !important;
+  }
+
+  /* Ensure images/iframes never overflow */
+  img, iframe, video, embed, object {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Ensure tables scroll horizontally instead of breaking layout */
+  table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Floating buttons */
   .scroll-to-top {
     bottom: 80px;
     right: 14px;
