@@ -145,6 +145,15 @@ a.text-primary,
   left: 20%;
 }
 
+/* ---------- Mobile navbar: sticky on scroll ---------- */
+@media (max-width: 767.98px) {
+  .navbar-dark-custom {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+  }
+}
+
 /* ---------- Scroll-to-top button ---------- */
 .scroll-to-top {
   position: fixed;

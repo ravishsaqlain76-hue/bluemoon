@@ -199,10 +199,33 @@
       <!-- Navbar -->
       <header class="navbar navbar-expand-md d-print-none navbar-dark-custom">
         <div class="container-xl">
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+          <!-- Mobile: hamburger (left) | logo (center) | avatar (right) -->
+          <div class="d-flex d-md-none align-items-center w-100">
+            <button class="navbar-toggler border-0 p-1" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="flex-grow-1 text-center">
+              <a href="{{ nav_home_url }}" class="d-inline-flex align-items-center">
+                {% if guest_house and guest_house.logo %}
+                  <img src="{{ guest_house.logo.url }}" alt="{{ guest_house.name }}" height="18">
+                {% elif guest_house.slug == 'blue-moon-residency' %}
+                  <img src="{% static 'pak.png' %}" alt="{{ guest_house.name }}" height="18">
+                {% else %}
+                  <img src="{% static 'pak-main.png' %}" alt="{% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %}" height="18">
+                {% endif %}
+              </a>
+            </div>
+            {% if user.is_authenticated %}
+            <a href="#" class="nav-link p-0" data-bs-toggle="dropdown" aria-label="User menu">
+              <span class="avatar avatar-sm">{{ user.first_name|default:user.username|make_list|first|upper }}</span>
+            </a>
+            {% endif %}
+          </div>
+          <!-- Desktop: normal brand -->
+          <button class="navbar-toggler d-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu">
             <span class="navbar-toggler-icon"></span>
           </button>
-          <div class="navbar-brand d-none-navbar-horizontal pe-0 pe-md-3">
+          <div class="navbar-brand d-none d-md-block pe-0 pe-md-3">
             <a href="{{ nav_home_url }}" class="d-flex align-items-center">
               {% if guest_house and guest_house.logo %}
                 <img src="{{ guest_house.logo.url }}" alt="{{ guest_house.name }}" height="18">
@@ -301,18 +324,18 @@
         <footer class="footer d-print-none" style="background: #0f1117; border-top: 2px solid #c5a04e; color: #fff;">
           <div class="container-xl">
             <!-- NAP Block (Name, Address, Phone) — consistent across every page for Local SEO -->
-            <div class="row mb-3 pt-3">
-              <div class="col-lg-4 mb-3 mb-lg-0">
+            <div class="row mb-2 pt-2">
+              <div class="col-lg-4 mb-2 mb-lg-0">
                 <a href="{{ nav_home_url }}">
                   {% if guest_house and guest_house.logo %}
-                    <img src="{{ guest_house.logo.url }}" alt="{{ guest_house.name }}" height="36" class="mb-2" style="border-radius: 4px;">
+                    <img src="{{ guest_house.logo.url }}" alt="{{ guest_house.name }}" height="24" class="mb-1" style="border-radius: 4px;">
                   {% elif guest_house.slug == 'blue-moon-residency' %}
-                    <img src="{% static 'pak.png' %}" alt="{{ guest_house.name }}" height="36" class="mb-2" style="border-radius: 4px;">
+                    <img src="{% static 'pak.png' %}" alt="{{ guest_house.name }}" height="24" class="mb-1" style="border-radius: 4px;">
                   {% else %}
-                    <img src="{% static 'pak-main.png' %}" alt="{% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %}" height="36" class="mb-2" style="border-radius: 4px;">
+                    <img src="{% static 'pak-main.png' %}" alt="{% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %}" height="24" class="mb-1" style="border-radius: 4px;">
                   {% endif %}
                 </a>
-                <h3 class="h5 mb-1" style="color: #c5a04e;">{% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %}</h3>
+                <h3 class="h6 mb-1" style="color: #c5a04e;">{% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %}</h3>
                 {% if guest_house %}
                 <address class="mb-0" style="font-style: normal; font-size: 0.85rem; color: rgba(255,255,255,0.6);">
                   {{ guest_house.street_address }}<br>
@@ -330,26 +353,26 @@
                 </address>
                 {% endif %}
               </div>
-              <div class="col-lg-4 mb-3 mb-lg-0">
-                <h3 class="h5 mb-1" style="color: #c5a04e;">Quick Links</h3>
-                <ul class="list-unstyled mb-0" style="font-size: 0.85rem;">
+              <div class="col-lg-4 mb-2 mb-lg-0" style="padding-top: 28px;">
+                <h3 class="h6 mb-1" style="color: #c5a04e;">Quick Links</h3>
+                <ul class="list-unstyled mb-0" style="font-size: 0.8rem;">
                   <li><a href="{{ nav_rooms_url }}" style="color: rgba(255,255,255,0.6);">Our Rooms</a></li>
                   <li><a href="{{ nav_about_url }}" style="color: rgba(255,255,255,0.6);">About</a></li>
                   <li><a href="{{ nav_contact_url }}" style="color: rgba(255,255,255,0.6);">Contact Us</a></li>
                 </ul>
               </div>
-              <div class="col-lg-4">
-                <h3 class="h5 mb-1" style="color: #c5a04e;">Near Us</h3>
-                <ul class="list-unstyled mb-0" style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">
+              <div class="col-lg-4" style="padding-top: 28px;">
+                <h3 class="h6 mb-1" style="color: #c5a04e;">Near Us</h3>
+                <ul class="list-unstyled mb-0" style="font-size: 0.8rem; color: rgba(255,255,255,0.6);">
                   <li>Faisal Mosque — 5 min drive</li>
                   <li>Margalla Hills — 10 min drive</li>
                   <li>Centaurus Mall — 8 min drive</li>
                 </ul>
               </div>
             </div>
-            <div class="row text-center align-items-center pt-3" style="border-top: 1px solid rgba(197,160,78,0.3);">
-              <div class="col-12">
-                <small style="color: rgba(255,255,255,0.5);">&copy; 2026 {% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %} — Islamabad, Pakistan. All rights reserved.</small>
+            <div class="row text-center align-items-center pt-2" style="border-top: 1px solid rgba(197,160,78,0.3);">
+              <div class="col-12 pb-1">
+                <small style="color: rgba(255,255,255,0.5); font-size: 0.75rem;">&copy; 2026 {% if guest_house %}{{ guest_house.name }}{% else %}Blue Moon{% endif %} — Islamabad, Pakistan. All rights reserved.</small>
               </div>
             </div>
           </div>

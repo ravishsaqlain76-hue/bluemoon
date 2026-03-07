@@ -39,21 +39,34 @@
       .prop-phone a:hover { text-decoration: underline; }
       .footer-links a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.875rem; }
       .footer-links a:hover { color: #c5a04e; }
+
+      /* Mobile only — compact layout */
+      @media (max-width: 767.98px) {
+        .prop-header-logo { height: 40px !important; }
+        .prop-header-title { font-size: 1.2rem !important; }
+        .prop-header-sub { font-size: 0.8rem !important; }
+        .prop-avatar { width: 36px; height: 36px; font-size: 0.9rem; }
+        .property-card .card-body { padding: 0.75rem !important; }
+        .property-card h3 { font-size: 0.95rem !important; }
+        .prop-address { font-size: 0.75rem; }
+        .prop-phone { font-size: 0.75rem; }
+        .property-card .btn { font-size: 0.8rem; padding: 6px 12px; }
+      }
     </style>
   </head>
   <body>
     <div class="container py-5">
       <!-- Header -->
       <div class="text-center mb-5 pt-4">
-        <img src="{% static 'pak-main.png' %}" alt="Blue Moon" height="100" class="mb-3" style="border-radius: 8px;">
-        <h1 class="gold mb-1" style="font-size: 2.2rem; font-weight: 700;">Blue Moon Guest Houses</h1>
-        <p class="text-white-50" style="font-size: 1.05rem;">Select a property to continue</p>
+        <img src="{% static 'pak-main.png' %}" alt="Blue Moon" height="100" class="mb-3 prop-header-logo" style="border-radius: 8px;">
+        <h1 class="gold mb-1 prop-header-title" style="font-size: 1.2rem; font-weight: 700;">Blue Moon Guest Houses</h1>
+        <p class="text-white-50 prop-header-sub" style="font-size: 1.05rem;">Select a property to continue</p>
       </div>
 
       <!-- Property Cards -->
       <div class="row g-4 justify-content-center">
         {% for prop in properties %}
-        <div class="col-sm-6 col-lg-4">
+        <div class="col-md-4">
           <div class="card property-card">
             <div class="card-body text-center p-4 d-flex flex-column">
               {% if prop.logo %}
