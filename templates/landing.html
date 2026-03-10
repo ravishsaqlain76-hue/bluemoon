@@ -192,24 +192,27 @@
 
 
     <!-- Topbar Start -->
-    <div class="container-fluid bg-dark px-5 d-none d-lg-block">
-        <div class="row gx-0">
-            <div class="col-lg-8 text-center text-lg-start mb-2 mb-lg-0">
-                <div class="d-inline-flex align-items-center" style="height: 45px;">
-                    <small class="me-3 text-light"><i class="fa fa-map-marker-alt me-2"></i>{{ business.street_address }}, {{ business.locality }}</small>
+    <div class="container-fluid bg-dark px-4 d-none d-lg-block">
+        <div class="row gx-0 align-items-center">
+            <div class="col text-start">
+                <div class="d-flex align-items-center flex-nowrap" style="height: 38px; font-size: 0.8rem;">
+                    <small class="text-light text-nowrap me-3"><i class="fa fa-map-marker-alt me-1"></i>{{ business.street_address }}, {{ business.locality }}</small>
                     {% if business.phone %}
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i><a href="tel:{{ business.phone }}" class="text-light text-decoration-none">{{ business.phone }}</a></small>
+                    <span class="text-light me-3" style="opacity: 0.3;">|</span>
+                    <small class="text-light text-nowrap me-3"><i class="fa fa-phone-alt me-1"></i><a href="tel:{{ business.phone }}" class="text-light text-decoration-none">{{ business.phone }}</a></small>
                     {% endif %}
                     {% if business.phone2 %}
-                    <small class="me-3 text-light"><i class="fa fa-phone-alt me-2"></i><a href="tel:{{ business.phone2 }}" class="text-light text-decoration-none">{{ business.phone2 }}</a></small>
+                    <span class="text-light me-3" style="opacity: 0.3;">|</span>
+                    <small class="text-light text-nowrap me-3"><i class="fa fa-phone-alt me-1"></i><a href="tel:{{ business.phone2 }}" class="text-light text-decoration-none">{{ business.phone2 }}</a></small>
                     {% endif %}
                     {% if business.email %}
-                    <small class="text-light"><i class="fa fa-envelope-open me-2"></i><a href="mailto:{{ business.email }}" class="text-light text-decoration-none">{{ business.email }}</a></small>
+                    <span class="text-light me-3" style="opacity: 0.3;">|</span>
+                    <small class="text-light text-nowrap"><i class="fa fa-envelope-open me-1"></i><a href="mailto:{{ business.email }}" class="text-light text-decoration-none">{{ business.email }}</a></small>
                     {% endif %}
                 </div>
             </div>
-            <div class="col-lg-4 text-center text-lg-end">
-                <div class="d-inline-flex align-items-center" style="height: 45px;">
+            <div class="col-auto text-end">
+                <div class="d-inline-flex align-items-center" style="height: 38px;">
                     {% if business.phone %}
                     <a class="btn btn-sm btn-outline-light btn-sm-square rounded-circle me-2" href="https://wa.me/{{ business.phone|cut:'+' |cut:' ' |cut:'-' }}" target="_blank" rel="noopener" aria-label="WhatsApp"><i class="fab fa-whatsapp fw-normal"></i></a>
                     {% endif %}

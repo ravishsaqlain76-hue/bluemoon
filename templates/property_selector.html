@@ -40,6 +40,21 @@
       .footer-links a { color: rgba(255,255,255,0.4); text-decoration: none; font-size: 0.875rem; }
       .footer-links a:hover { color: #c5a04e; }
 
+      /* Tablet — scale down */
+      @media (min-width: 768px) {
+        html { font-size: 14px; }
+        .container { max-width: 720px; }
+        .prop-header-logo { height: 70px !important; }
+        .prop-avatar { width: 52px; height: 52px; font-size: 1.1rem; }
+      }
+
+      /* Desktop — balanced scale */
+      @media (min-width: 1200px) {
+        html { font-size: 15px; }
+        .container { max-width: 960px; }
+        .prop-header-logo { height: 80px !important; }
+      }
+
       /* Mobile only — compact layout */
       @media (max-width: 767.98px) {
         .prop-header-logo { height: 40px !important; }
