@@ -402,68 +402,77 @@
 }
 
 
-/* ---------- Scale down for tablet & desktop (reduce "zoomed" feel) ---------- */
+/* ---------- Desktop/Tablet: scale everything down (fix zoomed look) ---------- */
+
+/* Tablet (768px – 1199px) */
 @media (min-width: 768px) and (max-width: 1199.98px) {
-  .landing-page {
-    font-size: 14px;
+  html { font-size: 11px !important; }
+
+  .landing-page .container-xxl,
+  .landing-page .container,
+  .landing-page .container-fluid > .container {
+    max-width: 800px !important;
   }
-  .landing-page h1.display-3 {
-    font-size: 2.5rem !important;
-  }
-  .landing-page h2.display-5,
-  .landing-page .display-5 {
-    font-size: 1.8rem !important;
-  }
-  .landing-page .fs-4 {
-    font-size: 1rem !important;
-  }
-  .landing-page .fs-5 {
-    font-size: 0.95rem !important;
-  }
+
+  .landing-page h1.display-3 { font-size: 2.2rem !important; }
+  .landing-page h2, .landing-page .display-5 { font-size: 1.5rem !important; }
+  .landing-page h6.section-title { font-size: 0.8rem !important; }
+  .landing-page .fs-4 { font-size: 0.95rem !important; }
+  .landing-page .fs-5 { font-size: 0.85rem !important; }
+
   .landing-page .navbar-light .navbar-nav .nav-link {
-    font-size: 15px;
-    margin-right: 15px;
-    padding: 25px 0;
+    font-size: 14px;
+    margin-right: 12px;
+    padding: 20px 0;
   }
   .landing-page .sticky-top.navbar-light .navbar-nav .nav-link {
-    padding: 15px 0;
+    padding: 12px 0;
   }
-  .landing-logo {
-    height: 80px;
+  .landing-logo { height: 60px; }
+
+  .landing-page .py-5 {
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
   }
+  .landing-page .mb-5 { margin-bottom: 2rem !important; }
+
+  .landing-page .btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 1.2rem;
+  }
+  .landing-page .btn.rounded-pill {
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+/* Desktop (1200px+) */
+@media (min-width: 1200px) {
+  html { font-size: 12px !important; }
+
   .landing-page .container-xxl,
-  .landing-page .container {
-    max-width: 960px;
+  .landing-page .container,
+  .landing-page .container-fluid > .container {
+    max-width: 940px !important;
   }
+
+  .landing-page h1.display-3 { font-size: 2.8rem !important; }
+  .landing-page h2, .landing-page .display-5 { font-size: 1.8rem !important; }
+  .landing-page h6.section-title { font-size: 0.85rem !important; }
+  .landing-page .fs-4 { font-size: 1rem !important; }
+  .landing-page .fs-5 { font-size: 0.9rem !important; }
+
+  .landing-page .navbar-light .navbar-nav .nav-link {
+    font-size: 15px;
+    margin-right: 18px;
+    padding: 25px 0;
+  }
+  .landing-logo { height: 70px; }
+
   .landing-page .py-5 {
     padding-top: 2.5rem !important;
     padding-bottom: 2.5rem !important;
   }
-}
-
-@media (min-width: 1200px) {
-  .landing-page {
-    font-size: 15px;
-  }
-  .landing-page h1.display-3 {
-    font-size: 3rem !important;
-  }
-  .landing-page h2.display-5,
-  .landing-page .display-5 {
-    font-size: 2rem !important;
-  }
-  .landing-page .navbar-light .navbar-nav .nav-link {
-    font-size: 16px;
-    margin-right: 20px;
-    padding: 28px 0;
-  }
-  .landing-logo {
-    height: 90px;
-  }
-  .landing-page .container-xxl,
-  .landing-page .container {
-    max-width: 1140px;
-  }
+  .landing-page .mb-5 { margin-bottom: 2.5rem !important; }
 }
 
 
