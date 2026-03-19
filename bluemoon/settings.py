@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
-import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ENVIRONMENT DETECTION
 # =============================================================================
 # Detect if we're running on a cloud platform (Render or Railway) or locally
-IS_PRODUCTION = os.environ.get('RENDER', '') == 'true' or os.environ.get('RAILWAY_ENVIRONMENT', '') != ''
+IS_PRODUCTION = os.environ.get('RENDER', '') == 'true' or os.environ.get('RAILWAY_ENVIRONMENT', '') != '' or os.environ.get('VERCEL', '') == '1'
 
 
 # =============================================================================
@@ -42,10 +41,15 @@ ALLOWED_HOSTS = []
 if IS_PRODUCTION:
     RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
     RAILWAY_PUBLIC_DOMAIN = os.environ.get('RAILWAY_PUBLIC_DOMAIN')
+    VERCEL_URL = os.environ.get('VERCEL_URL')
     if RENDER_EXTERNAL_HOSTNAME:
         ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
     if RAILWAY_PUBLIC_DOMAIN:
         ALLOWED_HOSTS.append(RAILWAY_PUBLIC_DOMAIN)
+    if VERCEL_URL:
+        ALLOWED_HOSTS.append(VERCEL_URL)
+    # Allow all .vercel.app subdomains
+    ALLOWED_HOSTS.append('.vercel.app')
     # Fallback: allow all if no specific host detected
     if not ALLOWED_HOSTS:
         ALLOWED_HOSTS = ['*']
@@ -80,7 +84,10 @@ INSTALLED_APPS = [
 # =============================================================================
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',  # Static files on Render
+]
+if IS_PRODUCTION:
+    MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
+MIDDLEWARE += [
     'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -119,6 +126,7 @@ WSGI_APPLICATION = 'bluemoon.wsgi.application'
 # On Render: reads DATABASE_URL environment variable (PostgreSQL)
 # On local: uses SQLite (no change for you)
 if IS_PRODUCTION:
+    import dj_database_url
     DATABASES = {
         'default': dj_database_url.config(
             conn_max_age=600,
@@ -161,12 +169,13 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-# WhiteNoise: serves static files efficiently on Render
-STORAGES = {
-    'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
-    },
-}
+# WhiteNoise: serves static files efficiently in production
+if IS_PRODUCTION:
+    STORAGES = {
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
 
 # Media files (user uploads)
 MEDIA_URL = '/media/'
@@ -223,6 +232,8 @@ if IS_PRODUCTION:
         CSRF_TRUSTED_ORIGINS.append(f'https://{os.environ["RENDER_EXTERNAL_HOSTNAME"]}')
     if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
         CSRF_TRUSTED_ORIGINS.append(f'https://{os.environ["RAILWAY_PUBLIC_DOMAIN"]}')
+    if os.environ.get('VERCEL_URL'):
+        CSRF_TRUSTED_ORIGINS.append(f'https://{os.environ["VERCEL_URL"]}')
 
 
 # =============================================================================
@@ -252,5 +263,7 @@ if IS_PRODUCTION:
         CORS_ALLOWED_ORIGINS.append(f'https://{os.environ["RENDER_EXTERNAL_HOSTNAME"]}')
     if os.environ.get('RAILWAY_PUBLIC_DOMAIN'):
         CORS_ALLOWED_ORIGINS.append(f'https://{os.environ["RAILWAY_PUBLIC_DOMAIN"]}')
+    if os.environ.get('VERCEL_URL'):
+        CORS_ALLOWED_ORIGINS.append(f'https://{os.environ["VERCEL_URL"]}')
 else:
     CORS_ALLOW_ALL_ORIGINS = True
