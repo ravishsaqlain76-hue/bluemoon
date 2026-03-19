@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-akty4*gqwl!v6b4cys7-k
 
 # On Render: DEBUG off (production)
 # On local: DEBUG on (development)
-DEBUG = not IS_PRODUCTION
+DEBUG = os.environ.get('DEBUG', 'true').lower() in ('true', '1', 'yes')
 
 # Production: allow platform URLs
 # Local: allow everything
