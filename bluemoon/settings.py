@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ENVIRONMENT DETECTION
 # =============================================================================
 # Detect if we're running on a cloud platform (Render or Railway) or locally
-IS_PRODUCTION = os.environ.get('RENDER', '') == 'true' or os.environ.get('RAILWAY_ENVIRONMENT', '') != '' or os.environ.get('VERCEL', '') == '1'
+IS_PRODUCTION = os.environ.get('RENDER', '') == 'true' or os.environ.get('RAILWAY_ENVIRONMENT', '') != '' or os.environ.get('VERCEL', '') != ''
 
 
 # =============================================================================
@@ -125,7 +125,7 @@ WSGI_APPLICATION = 'bluemoon.wsgi.application'
 # =============================================================================
 # On Render: reads DATABASE_URL environment variable (PostgreSQL)
 # On local: uses SQLite (no change for you)
-if IS_PRODUCTION:
+if IS_PRODUCTION and os.environ.get('DATABASE_URL'):
     import dj_database_url
     DATABASES = {
         'default': dj_database_url.config(
